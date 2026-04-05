@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import RoadmapsPage from "./pages/RoadmapsPage";
 import RoadmapLearning from "./pages/RoadmapLearning";
 import ResourcesPage from "./pages/ResourcesPage";
+import ApplicationsPage from "./pages/ApplicationsPage";
 import AdminPage from "./pages/AdminPage";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -87,6 +88,18 @@ function App() {
             <ProtectedRoute>
               <MainLayout>
                 <ResourcesPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Applications */}
+        <Route
+          path="/applications"
+          element={
+            <ProtectedRoute>
+              <MainLayout backgroundType="learningPath">
+                <ApplicationsPage />
               </MainLayout>
             </ProtectedRoute>
           }
