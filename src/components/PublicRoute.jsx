@@ -26,7 +26,10 @@ const PublicRoute = ({ children }) => {
   }
 
   if (currentUser && currentUser.emailVerified) {
-    if (userProfile?.profileCompleted) {
+    if (userProfile?.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
+    if (userProfile?.isOnboarded || userProfile?.profileCompleted || userProfile?.onboardingCompleted) {
       return <Navigate to="/dashboard" replace />;
     }
     return <Navigate to="/onboarding" replace />;

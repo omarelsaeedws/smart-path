@@ -28,7 +28,8 @@ const ProtectedRoute = ({ children }) => {
   // (but don't redirect if they're already on /onboarding)
   if (
     userProfile &&
-    !userProfile.onboardingCompleted &&
+    userProfile.role !== "admin" &&
+    (userProfile.isOnboarded === false && !userProfile.onboardingCompleted) &&
     location.pathname !== "/onboarding"
   ) {
     return <Navigate to="/onboarding" replace />;

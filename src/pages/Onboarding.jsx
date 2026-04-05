@@ -67,7 +67,8 @@ const Onboarding = () => {
           level,
           dailyStudyHours,
           interests,
-          onboardingCompleted: true,
+          isOnboarded: true,
+          onboardingCompleted: true, // Keep for backward compatibility for a while
           updatedAt: serverTimestamp(),
         },
         { merge: true }

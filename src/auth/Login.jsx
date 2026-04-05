@@ -39,7 +39,8 @@ function Login() {
     if (!loading && userProfile) {
       if (userProfile.role === "admin") {
         navigate("/admin");
-      } else if (userProfile.onboardingCompleted) {
+      } else if (userProfile.isOnboarded === true || userProfile.onboardingCompleted) {
+        // Fallback added for existing users who have onboardingCompleted
         navigate("/dashboard");
       } else {
         navigate("/onboarding");

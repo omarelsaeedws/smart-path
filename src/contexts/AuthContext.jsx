@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
               setUserProfile(profileData);
             } else {
               const newProfile = {
-                profileCompleted: false,
+                isOnboarded: false,
                 firstLogin: true,
                 email: user.email,
                 role: user.email === "admin@smartpath.com" ? "admin" : "user",
