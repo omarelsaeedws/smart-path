@@ -11,6 +11,7 @@ import {
   faXmark,
   faTools,
   faShieldHalved,
+  faLaptopCode,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
@@ -31,6 +32,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
     { name: "لوحة التحكم", path: "/dashboard", icon: faHouse },
     { name: "مسارات التعلم", path: "/roadmaps", icon: faRoad },
     { name: "الأدوات", path: "/resources", icon: faTools },
+    { name: "التطبيقات العملية", path: "/applications", icon: faLaptopCode },
     { name: "الإعدادات", path: "/settings", icon: faGear },
     ...(isAdmin ? [{ name: "لوحة الإدارة", path: "/admin", icon: faShieldHalved }] : []),
   ];

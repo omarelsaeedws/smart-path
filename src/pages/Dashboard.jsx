@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getActiveRoadmapId, getUserProgress } from "../services/progressService";
 import { getRoadmapById, getRoadmaps } from "../services/roadmapService";
 import { subscribeToResources } from "../services/resourceService";
+import { subscribeToApplications } from "../services/applicationService";
+import { subscribeToCategories } from "../services/categoryService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
@@ -13,6 +15,8 @@ import {
   faChevronLeft,
   faTools,
   faExternalLinkAlt,
+  faLaptopCode,
+  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 // ── Circular Progress ──────────────────────────────────────────────────────
@@ -52,25 +56,25 @@ const Dashboard = () => {
   const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
-  const [activeRoadmap, setActiveRoadmap] = useState(null); // { id, title, description, level, totalWeeks }
+  const [activeRoadmap, setActiveRoadmap] = useState(null);
   const [progressData, setProgressData] = useState({ completedLessons: [], progress: 0 });
-  const [suggestedRoadmaps, setSuggestedRoadmaps] = useState([]);
+  const [allRoadmaps, setAllRoadmaps] = useState([]);
   const [tools, setTools] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!currentUser) return;
 
-    const unsub = subscribeToResources((data) => {
-      setTools(data.slice(0, 3));
-    });
+    const unsubTools = subscribeToResources(setTools);
+    const unsubApps = subscribeToApplications(setApplications);
+    const unsubCats = subscribeToCategories(setCategories);
 
     const load = async () => {
       try {
-        // 1. Get active roadmap ID
         const activeId = await getActiveRoadmapId(currentUser.uid);
-
         if (activeId) {
           const [rm, progress] = await Promise.all([
             getRoadmapById(activeId),
@@ -79,10 +83,8 @@ const Dashboard = () => {
           setActiveRoadmap(rm ? { ...rm, id: activeId } : null);
           setProgressData(progress || { completedLessons: [], progress: 0 });
         }
-
-        // 2. Get suggested roadmaps (first 3)
         const all = await getRoadmaps();
-        setSuggestedRoadmaps(all.slice(0, 3));
+        setAllRoadmaps(all);
       } catch (err) {
         console.error("Dashboard load error:", err);
         setError("حدث خطأ، حاول مرة أخرى");
@@ -92,7 +94,11 @@ const Dashboard = () => {
     };
 
     load();
-    return () => unsub();
+    return () => {
+      unsubTools();
+      unsubApps();
+      unsubCats();
+    };
   }, [currentUser]);
 
   if (loading) {
@@ -115,43 +121,61 @@ const Dashboard = () => {
   const completedCount = progressData.completedLessons?.length || 0;
   const progress = progressData.progress || 0;
 
+  // ── Interest-based filtering ──────────────────────────────────────────────
+  const userInterests = userProfile?.interests || [];
+  const hasInterests = userInterests.length > 0;
+
+  // Build categoryId → name map
+  const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]));
+
+  // Filter roadmaps by interests; fall back to first 3 if no match
+  const filteredRoadmaps = hasInterests
+    ? allRoadmaps.filter((rm) => userInterests.includes(rm.categoryId))
+    : allRoadmaps;
+  const suggestedRoadmaps = (filteredRoadmaps.length > 0 ? filteredRoadmaps : allRoadmaps).slice(0, 3);
+
+  // Filter applications by interests; fall back to first 3
+  const filteredApps = hasInterests
+    ? applications.filter((app) => userInterests.includes(app.categoryId))
+    : applications;
+  const suggestedApps = (filteredApps.length > 0 ? filteredApps : applications).slice(0, 3);
+
+  // Filter tools by interests; fall back to first 3
+  const filteredTools = hasInterests
+    ? tools.filter((t) => userInterests.includes(t.categoryId))
+    : tools;
+  const suggestedTools = (filteredTools.length > 0 ? filteredTools : tools).slice(0, 3);
+
   return (
     <div className="p-6 sm:p-10 relative overflow-hidden w-full animate-fade-in-up" dir="rtl">
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col gap-8">
 
-        {/* ── Welcome header ─────────────────────────────────── */}
+        {/* ── Welcome header ── */}
         <div className="flex items-center gap-4 animate-fade-in-up stagger-1">
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center font-bold text-2xl text-white border border-white/30 shadow-inner flex-shrink-0">
             {displayName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold text-white">
-              مرحباً، {displayName} 👋
-            </h1>
+            <h1 className="text-3xl font-extrabold text-white">مرحباً، {displayName} 👋</h1>
             <p className="text-white/60">دعنا نكمل مسار تعلمك اليوم</p>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl mb-4">
+          <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl">
             {error}
           </div>
         )}
 
-        {/* ── Active roadmap card ────────────────────────────── */}
+        {/* ── Active roadmap card ── */}
         {activeRoadmap ? (
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 flex flex-col md:flex-row items-center gap-8 hover:shadow-[0_15px_40px_rgba(14,165,233,0.25)] transition-shadow duration-500 animate-fade-in-up stagger-2">
-            {/* Info */}
             <div className="flex-1 text-right w-full">
               <span className="inline-block bg-sky-500/30 text-sky-100 font-bold px-4 py-1.5 rounded-full text-sm mb-4 border border-sky-400/30">
                 المسار الحالي النشط
               </span>
-              <h2 className="text-3xl font-extrabold text-white mb-3 leading-tight">
-                {activeRoadmap.title}
-              </h2>
+              <h2 className="text-3xl font-extrabold text-white mb-3 leading-tight">{activeRoadmap.title}</h2>
               <p className="text-white/70 text-base mb-6 line-clamp-2">{activeRoadmap.description}</p>
-
-              {/* Stats */}
               <div className="flex gap-4 mb-6 flex-wrap">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex-1 min-w-[110px]">
                   <p className="text-white/50 text-xs mb-1">الدروس المكتملة</p>
@@ -166,7 +190,6 @@ const Dashboard = () => {
                   <p className="text-2xl font-bold text-white">{activeRoadmap.totalWeeks || 0}</p>
                 </div>
               </div>
-
               <div className="flex gap-3 flex-wrap">
                 <button
                   onClick={() => navigate(`/roadmap/${activeRoadmap.id}`)}
@@ -183,18 +206,15 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-
-            {/* Progress ring */}
             <div className="flex-shrink-0 bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col items-center gap-3 hover:scale-105 transition-transform duration-300">
               <p className="text-white/70 font-bold text-sm">نسبة الإنجاز</p>
               <CircularProgress value={progress} />
-              <p className="text-white/50 text-xs text-center ">
+              <p className="text-white/50 text-xs text-center">
                 {progress === 100 ? "🎉 أتممت المسار!" : "استمر للأمام!"}
               </p>
             </div>
           </div>
         ) : (
-          /* No active roadmap → CTA */
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-10 text-center">
             <FontAwesomeIcon icon={faBookOpen} className="text-white/20 text-6xl mb-6" />
             <h2 className="text-2xl font-bold text-white mb-3">لم تبدأ أي مسار بعد</h2>
@@ -208,13 +228,13 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* ── Suggested roadmaps ─────────────────────────────── */}
+        {/* ── Suggested Roadmaps (interest-filtered) ── */}
         {suggestedRoadmaps.length > 0 && (
           <div className="animate-fade-in-up stagger-3">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <FontAwesomeIcon icon={faStar} className="text-amber-400" />
-                مسارات مقترحة
+                {hasInterests ? "مسارات تناسب اهتماماتك" : "مسارات مقترحة"}
               </h2>
               <button
                 onClick={() => navigate("/roadmaps")}
@@ -224,7 +244,6 @@ const Dashboard = () => {
                 <FontAwesomeIcon icon={faChevronLeft} />
               </button>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {suggestedRoadmaps.map((rm) => (
                 <div
@@ -232,7 +251,7 @@ const Dashboard = () => {
                   onClick={() => navigate("/roadmaps")}
                   className="bg-white/5 border border-white/10 rounded-2xl p-5 cursor-pointer hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group"
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex justify-between items-start mb-2">
                     <span className="bg-sky-500/20 text-sky-200 text-xs font-bold px-2.5 py-1 rounded-full border border-sky-500/30">
                       {rm.level || "عام"}
                     </span>
@@ -241,6 +260,12 @@ const Dashboard = () => {
                       {rm.totalWeeks || 0}w
                     </span>
                   </div>
+                  {categoryMap[rm.categoryId] && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-violet-500/15 text-violet-300 border border-violet-500/20 mb-2">
+                      <FontAwesomeIcon icon={faTag} className="text-[9px]" />
+                      {categoryMap[rm.categoryId]}
+                    </span>
+                  )}
                   <h3 className="text-white font-bold mb-1 line-clamp-2 group-hover:text-sky-300 transition-colors">
                     {rm.title}
                   </h3>
@@ -251,13 +276,62 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* ── Suggested Tools ────────────────────────────────── */}
-        {tools.length > 0 && (
+        {/* ── Suggested Applications (interest-filtered) ── */}
+        {suggestedApps.length > 0 && (
+          <div className="animate-fade-in-up stagger-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <FontAwesomeIcon icon={faLaptopCode} className="text-violet-400" />
+                {hasInterests ? "تطبيقات تناسب اهتماماتك" : "تطبيقات مقترحة"}
+              </h2>
+              <button
+                onClick={() => navigate("/applications")}
+                className="text-sky-300 hover:text-sky-200 font-bold text-sm flex items-center gap-1 transition-colors"
+              >
+                عرض الكل
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {suggestedApps.map((app) => (
+                <div
+                  key={app.id}
+                  className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group flex flex-col"
+                >
+                  {categoryMap[app.categoryId] && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-violet-500/15 text-violet-300 border border-violet-500/20 mb-2 w-fit">
+                      <FontAwesomeIcon icon={faTag} className="text-[9px]" />
+                      {categoryMap[app.categoryId]}
+                    </span>
+                  )}
+                  <h3 className="text-white font-bold mb-1 line-clamp-2 group-hover:text-violet-300 transition-colors flex-1">
+                    {app.title}
+                  </h3>
+                  <p className="text-white/50 text-xs line-clamp-2 mb-3">{app.description}</p>
+                  {app.link ? (
+                    <a
+                      href={app.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto text-center py-2 bg-violet-500/10 hover:bg-violet-500/20 text-violet-300 text-xs font-bold rounded-lg border border-violet-500/20 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px]" />
+                      عرض المشروع
+                    </a>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Suggested Tools (interest-filtered) ── */}
+        {suggestedTools.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <FontAwesomeIcon icon={faTools} className="text-emerald-400" />
-                اقتراحات الأدوات
+                {hasInterests ? "أدوات تناسب اهتماماتك" : "اقتراحات الأدوات"}
               </h2>
               <button
                 onClick={() => navigate("/resources")}
@@ -267,31 +341,35 @@ const Dashboard = () => {
                 <FontAwesomeIcon icon={faChevronLeft} />
               </button>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {tools.map((tool) => (
+              {suggestedTools.map((tool) => (
                 <div
                   key={tool.id}
                   className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0">
                       <FontAwesomeIcon icon={faTools} />
                     </div>
                     <h3 className="text-white font-bold line-clamp-1 group-hover:text-emerald-300 transition-colors">
                       {tool.name}
                     </h3>
                   </div>
-                  <p className="text-white/50 text-xs line-clamp-2 mb-4 flex-grow">
-                    {tool.description}
-                  </p>
+                  {(categoryMap[tool.categoryId] || tool.category) && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 mb-2 w-fit">
+                      <FontAwesomeIcon icon={faTag} className="text-[9px]" />
+                      {categoryMap[tool.categoryId] || tool.category}
+                    </span>
+                  )}
+                  <p className="text-white/50 text-xs line-clamp-2 mb-4 flex-grow">{tool.description}</p>
                   <a
                     href={tool.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-auto w-full text-center py-2 bg-white/5 hover:bg-white/10 text-emerald-300 text-xs font-bold rounded-lg border border-white/10 transition-colors flex items-center justify-center gap-2"
                   >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} /> فتح الأداة
+                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    فتح الأداة
                   </a>
                 </div>
               ))}

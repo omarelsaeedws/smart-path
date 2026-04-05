@@ -1,32 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../lib/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { subscribeToCategories } from "../services/categoryService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
   faClock,
   faChevronRight,
-  faCode,
-  faPaintBrush,
-  faDatabase,
-  faMobile,
-  faRobot,
-  faCloud,
-  faShieldAlt,
-  faChartLine,
+  faCheckCircle,
+  faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 
-const INTERESTS = [
-  { id: "web-dev", label: "تطوير الويب", icon: faCode },
-  { id: "ui-ux", label: "تصميم UI/UX", icon: faPaintBrush },
-  { id: "databases", label: "قواعد البيانات", icon: faDatabase },
-  { id: "mobile", label: "تطبيقات الجوال", icon: faMobile },
-  { id: "ai-ml", label: "الذكاء الاصطناعي", icon: faRobot },
-  { id: "devops", label: "DevOps & Cloud", icon: faCloud },
-  { id: "cybersecurity", label: "الأمن السيبراني", icon: faShieldAlt },
-  { id: "data-science", label: "علم البيانات", icon: faChartLine },
+// Cycling gradient palette for category tiles
+const TILE_GRADIENTS = [
+  "from-sky-500 to-indigo-600",
+  "from-violet-500 to-purple-600",
+  "from-emerald-500 to-teal-600",
+  "from-rose-500 to-pink-600",
+  "from-amber-500 to-orange-600",
+  "from-cyan-500 to-blue-600",
+  "from-fuchsia-500 to-pink-600",
+  "from-lime-500 to-green-600",
 ];
 
 const LEVELS = [
@@ -42,9 +38,21 @@ const Onboarding = () => {
   const [step, setStep] = useState(1); // 1=level, 2=hours, 3=interests
   const [level, setLevel] = useState("");
   const [dailyStudyHours, setDailyStudyHours] = useState(2);
-  const [interests, setInterests] = useState([]);
+  const [interests, setInterests] = useState([]); // array of categoryIds
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // Dynamic categories from Firestore
+  const [categories, setCategories] = useState([]);
+  const [catsLoading, setCatsLoading] = useState(true);
+
+  useEffect(() => {
+    const unsub = subscribeToCategories((data) => {
+      setCategories(data);
+      setCatsLoading(false);
+    });
+    return () => unsub();
+  }, []);
 
   const toggleInterest = (id) => {
     setInterests((prev) =>
@@ -66,9 +74,9 @@ const Onboarding = () => {
         {
           level,
           dailyStudyHours,
-          interests,
+          interests, // array of categoryIds
           isOnboarded: true,
-          onboardingCompleted: true, // Keep for backward compatibility for a while
+          onboardingCompleted: true,
           updatedAt: serverTimestamp(),
         },
         { merge: true }
@@ -89,7 +97,6 @@ const Onboarding = () => {
     return interests.length > 0;
   };
 
-  // ── Step indicators ─────────────────────────────────────────────────────
   const steps = ["مستواك", "وقتك", "اهتماماتك"];
 
   return (
@@ -192,35 +199,70 @@ const Onboarding = () => {
             </div>
           )}
 
-          {/* ── STEP 3: Interests ─────────────────────────── */}
+          {/* ── STEP 3: Interests (Dynamic from Firestore) ── */}
           {step === 3 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-2">ما الذي يثير اهتمامك؟</h2>
-              <p className="text-white/50 text-sm mb-6">اختر اهتماماً واحداً أو أكثر</p>
-              <div className="grid grid-cols-2 gap-3">
-                {INTERESTS.map((item) => {
-                  const selected = interests.includes(item.id);
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => toggleInterest(item.id)}
-                      className={`flex items-center gap-3 p-3 rounded-2xl border text-right transition-all duration-200 ${
-                        selected
-                          ? "bg-sky-500/30 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
-                          : "bg-white/5 border-white/10 hover:bg-white/10"
-                      }`}
-                    >
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                        selected ? "bg-sky-500" : "bg-white/10"
-                      }`}>
-                        <FontAwesomeIcon icon={item.icon} className="text-white text-sm" />
-                      </div>
-                      <span className="text-white font-medium text-sm">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              {error && <p className="text-red-400 text-sm mt-4 text-center">{error}</p>}
+              <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                <FontAwesomeIcon icon={faLayerGroup} className="text-sky-400" />
+                ما الذي يثير اهتمامك؟
+              </h2>
+              <p className="text-white/50 text-sm mb-5">اختر اهتماماً واحداً أو أكثر من المجالات المتاحة</p>
+
+              {catsLoading ? (
+                /* Loading spinner */
+                <div className="flex justify-center py-10">
+                  <div className="relative w-12 h-12">
+                    <div className="absolute inset-0 border-4 border-white/20 rounded-full" />
+                    <div className="absolute inset-0 border-4 border-sky-400 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                </div>
+              ) : categories.length === 0 ? (
+                /* No categories yet */
+                <div className="text-center py-8">
+                  <FontAwesomeIcon icon={faLayerGroup} className="text-white/20 text-4xl mb-3" />
+                  <p className="text-white/50 text-sm">لا توجد فئات متاحة بعد. تواصل مع المدير.</p>
+                </div>
+              ) : (
+                /* Dynamic category grid */
+                <div className="grid grid-cols-2 gap-3">
+                  {categories.map((cat, idx) => {
+                    const selected = interests.includes(cat.id);
+                    const gradient = TILE_GRADIENTS[idx % TILE_GRADIENTS.length];
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => toggleInterest(cat.id)}
+                        className={`flex items-center gap-3 p-3 rounded-2xl border text-right transition-all duration-200 ${
+                          selected
+                            ? "bg-sky-500/30 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
+                            : "bg-white/5 border-white/10 hover:bg-white/10"
+                        }`}
+                      >
+                        {/* Letter avatar */}
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${selected ? "from-sky-400 to-indigo-600" : gradient} opacity-${selected ? "100" : "80"}`}>
+                          <span className="text-white font-black text-sm">
+                            {cat.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-white font-medium text-sm line-clamp-1">{cat.name}</span>
+                        </div>
+                        {selected && (
+                          <FontAwesomeIcon icon={faCheckCircle} className="text-sky-400 text-sm flex-shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Selected count */}
+              {interests.length > 0 && (
+                <p className="text-sky-300 text-xs text-center mt-3 font-medium">
+                  ✓ تم اختيار {interests.length} {interests.length === 1 ? "اهتمام" : "اهتمامات"}
+                </p>
+              )}
+              {error && <p className="text-red-400 text-sm mt-3 text-center">{error}</p>}
             </div>
           )}
 
@@ -249,10 +291,10 @@ const Onboarding = () => {
               </button>
             ) : (
               <button
-                disabled={saving || interests.length === 0}
+                disabled={saving || interests.length === 0 || catsLoading}
                 onClick={handleSubmit}
                 className={`flex-1 py-3 font-bold rounded-2xl transition-all ${
-                  saving || interests.length === 0
+                  saving || interests.length === 0 || catsLoading
                     ? "bg-white/10 text-white/40 cursor-not-allowed"
                     : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg hover:-translate-y-0.5"
                 }`}
