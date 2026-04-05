@@ -527,7 +527,7 @@ const AdminPage = () => {
                     <span className="inline-block px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded text-xs mb-2">{res.category}</span>
                     <h4 className="text-lg font-bold text-white pr-8">{res.name}</h4>
                     <p className="text-sm text-white/70 line-clamp-2">{res.description}</p>
-                    <button onClick={() => handleDeleteResource(res.id)} className="absolute top-4 right-4 text-red-400 hover:text-red-300 transition opacity-50 group-hover:opacity-100">
+                    <button onClick={() => handleDeleteResource(res.id)} className="absolute top-4 left-4 text-red-400 hover:text-red-300 transition opacity-50 group-hover:opacity-100">
                       <FontAwesomeIcon icon={faTrashAlt} />
                     </button>
                   </div>
