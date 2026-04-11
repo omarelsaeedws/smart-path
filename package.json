@@ -21,6 +21,8 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "firebase": "^12.6.0",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
     "nodemon": "^3.1.14",
     "openai": "^6.33.0",
     "react": "^19.2.0",

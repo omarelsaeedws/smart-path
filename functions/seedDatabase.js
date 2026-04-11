@@ -40,7 +40,7 @@ async function seed() {
       totalWeeks: 8,
       instructorName: "أحمد علي",
       contentSource: "YouTube",
-      sourceLink: "https://youtube.com",
+      sourceLink: "https://www.youtube.com/watch?v=ihRRf3EjTV8&list=PLYyqC4bNbCIdSZ-JayMLl4WO2Cr995vyS",
       averageRating: 0,
       ratingCount: 0,
       createdAt: admin.firestore.FieldValue.serverTimestamp()
