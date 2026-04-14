@@ -42,7 +42,7 @@ const RoadmapLearning = () => {
   const [allLessons, setAllLessons] = useState([]); // flat sorted list
   const [completedLessons, setCompletedLessons] = useState([]);
   const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [expandedLessonId, setExpandedLessonId] = useState(null);

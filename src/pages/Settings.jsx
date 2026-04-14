@@ -93,7 +93,7 @@ const Settings = () => {
   });
 
   // UI State
-  const [loadingInitial, setLoadingInitial] = useState(true);
+  const [, setLoadingInitial] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
