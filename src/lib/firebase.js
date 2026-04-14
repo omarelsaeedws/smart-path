@@ -9,12 +9,13 @@ import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions"; 
 
 const firebaseConfig = {
-  apiKey: "[GCP_API_KEY]",
+  apiKey: "AIzaSyBt9cmhX2zGQifkWW7REnp-kFjtSARcd-Q",
   authDomain: "smart-path-b8649.firebaseapp.com",
   projectId: "smart-path-b8649",
-  storageBucket: "smart-path-b8649.appspot.com",
-  messagingSenderId: "your_id",
-  appId: "your_app_id",
+  storageBucket: "smart-path-b8649.firebasestorage.app",
+  messagingSenderId: "256572128968",
+  appId: "1:256572128968:web:b3d13c5ad212441443affd",
+  measurementId: "G-64B041PP4M"
 };
 
 const app = initializeApp(firebaseConfig);

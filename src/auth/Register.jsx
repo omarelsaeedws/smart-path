@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
-import { connectAuthEmulator } from "firebase/auth";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import Popup from "../components/Popup";
 import AnimatedBackground from "../components/AnimatedBackground";
 
-connectAuthEmulator(auth, "http://127.0.0.1:9099");
+
 
 function Register() {
   const navigate = useNavigate();

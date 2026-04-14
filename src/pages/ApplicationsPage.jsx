@@ -84,11 +84,16 @@ const ApplicationCard = ({ app, index, categoryName }) => {
         <div
           className={`absolute inset-0 bg-gradient-to-br ${grad} flex items-center justify-center ${app.image ? "hidden" : "flex"}`}
         >
-          <FontAwesomeIcon icon={faLaptopCode} className="text-white/30 text-5xl" />
+          <FontAwesomeIcon
+            icon={faLaptopCode}
+            className="text-white/30 text-5xl"
+          />
         </div>
         {/* Level badge overlay */}
         <div className="absolute top-3 right-3">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md ${cfg.bg} ${cfg.text} ${cfg.border}`}
+          >
             <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
             {cfg.label}
           </span>
@@ -163,7 +168,7 @@ const ApplicationsPage = () => {
   // Build categoryId → name map for fast lookup
   const categoryMap = useMemo(
     () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
-    [categories]
+    [categories],
   );
 
   const filtered = useMemo(() => {
@@ -180,13 +185,18 @@ const ApplicationsPage = () => {
   }, [applications, searchQuery, activeLevel, activeCategoryId]);
 
   return (
-    <div className="p-6 sm:p-10 relative overflow-hidden w-full animate-fade-in-up" dir="rtl">
+    <div
+      className="p-6 sm:p-10 relative overflow-hidden w-full animate-fade-in-up"
+      dir="rtl"
+    >
       <div className="max-w-6xl mx-auto relative z-10">
-
         {/* ── Header ── */}
         <div className="mb-10 animate-fade-in-up stagger-1">
           <h1 className="text-4xl font-extrabold text-slate-800 dark:text-white drop-shadow-md flex items-center gap-3">
-            <FontAwesomeIcon icon={faLaptopCode} className="text-sky-500 dark:text-sky-400" />
+            <FontAwesomeIcon
+              icon={faLaptopCode}
+              className="text-sky-500 dark:text-sky-400"
+            />
             التطبيقات العملية
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
@@ -199,7 +209,10 @@ const ApplicationsPage = () => {
           {/* Row 1: Search */}
           <div className="flex gap-4">
             <div className="relative flex-1 max-w-sm">
-              <FontAwesomeIcon icon={faSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm" />
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm"
+              />
               <input
                 type="text"
                 placeholder="ابحث عن تطبيق..."
@@ -212,7 +225,9 @@ const ApplicationsPage = () => {
 
           {/* Row 2: Level Filter */}
           <div className="flex gap-2 flex-wrap items-center">
-            <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">المستوى:</span>
+            <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">
+              المستوى:
+            </span>
             {LEVELS.map((lvl) => {
               const cfg = levelConfig[lvl];
               const isActive = activeLevel === lvl;
@@ -237,7 +252,9 @@ const ApplicationsPage = () => {
           {/* Row 3: Category Filter (dynamic) */}
           {categories.length > 0 && (
             <div className="flex gap-2 flex-wrap items-center">
-              <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">الفئة:</span>
+              <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">
+                الفئة:
+              </span>
               <button
                 onClick={() => setActiveCategoryId("الكل")}
                 className={`px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-300 border ${
@@ -268,16 +285,23 @@ const ApplicationsPage = () => {
         {/* ── Loading Skeletons ── */}
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
+            {[...Array(6)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         )}
 
         {/* ── Empty State ── */}
         {!loading && filtered.length === 0 && (
           <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-3xl p-16 text-center shadow-xl animate-fade-in-up">
-            <FontAwesomeIcon icon={faLayerGroup} className="text-slate-300 dark:text-slate-600 text-6xl mb-6" />
+            <FontAwesomeIcon
+              icon={faLayerGroup}
+              className="text-slate-300 dark:text-slate-600 text-6xl mb-6"
+            />
             <h2 className="text-2xl text-slate-800 dark:text-white font-bold mb-3">
-              {applications.length === 0 ? "لا توجد تطبيقات حالياً" : "لا توجد نتائج مطابقة"}
+              {applications.length === 0
+                ? "لا توجد تطبيقات حالياً"
+                : "لا توجد نتائج مطابقة"}
             </h2>
             <p className="text-slate-500 dark:text-slate-400">
               {applications.length === 0

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getActiveRoadmapId, getUserProgress } from "../services/progressService";
+import {
+  getActiveRoadmapId,
+  getUserProgress,
+} from "../services/progressService";
 import { getRoadmapById, getRoadmaps } from "../services/roadmapService";
 import { subscribeToResources } from "../services/resourceService";
 import { subscribeToApplications } from "../services/applicationService";
@@ -46,7 +49,10 @@ const CircularProgress = ({ value }) => {
           fill="transparent"
           strokeWidth={stroke}
           strokeDasharray={`${circumference} ${circumference}`}
-          style={{ strokeDashoffset, transition: "stroke-dashoffset 1s ease-in-out" }}
+          style={{
+            strokeDashoffset,
+            transition: "stroke-dashoffset 1s ease-in-out",
+          }}
           strokeLinecap="round"
           r={normalizedRadius}
           cx={radius}
@@ -63,19 +69,21 @@ const CircularProgress = ({ value }) => {
   );
 };
 
-
 // ── Dashboard ──────────────────────────────────────────────────────────────
 const Dashboard = () => {
   const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
   const [activeRoadmap, setActiveRoadmap] = useState(null);
-  const [progressData, setProgressData] = useState({ completedLessons: [], progress: 0 });
+  const [progressData, setProgressData] = useState({
+    completedLessons: [],
+    progress: 0,
+  });
   const [allRoadmaps, setAllRoadmaps] = useState([]);
   const [tools, setTools] = useState([]);
   const [applications, setApplications] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -114,16 +122,6 @@ const Dashboard = () => {
     };
   }, [currentUser]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900" dir="rtl">
-        <div className="relative w-20 h-20">
-          <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-600 rounded-full" />
-          <div className="absolute inset-0 border-4 border-sky-500 dark:border-white border-t-transparent rounded-full animate-spin" />
-        </div>
-      </div>
-    );
-  }
 
   const displayName =
     userProfile?.displayName ||
@@ -145,32 +143,44 @@ const Dashboard = () => {
   const filteredRoadmaps = hasInterests
     ? allRoadmaps.filter((rm) => userInterests.includes(rm.categoryId))
     : allRoadmaps;
-  const suggestedRoadmaps = (filteredRoadmaps.length > 0 ? filteredRoadmaps : allRoadmaps).slice(0, 3);
+  const suggestedRoadmaps = (
+    filteredRoadmaps.length > 0 ? filteredRoadmaps : allRoadmaps
+  ).slice(0, 3);
 
   // Filter applications by interests; fall back to first 3
   const filteredApps = hasInterests
     ? applications.filter((app) => userInterests.includes(app.categoryId))
     : applications;
-  const suggestedApps = (filteredApps.length > 0 ? filteredApps : applications).slice(0, 3);
+  const suggestedApps = (
+    filteredApps.length > 0 ? filteredApps : applications
+  ).slice(0, 3);
 
   // Filter tools by interests; fall back to first 3
   const filteredTools = hasInterests
     ? tools.filter((t) => userInterests.includes(t.categoryId))
     : tools;
-  const suggestedTools = (filteredTools.length > 0 ? filteredTools : tools).slice(0, 3);
+  const suggestedTools = (
+    filteredTools.length > 0 ? filteredTools : tools
+  ).slice(0, 3);
 
   return (
-    <div className="p-6 sm:p-10 relative overflow-hidden w-full animate-fade-in-up" dir="rtl">
+    <div
+      className="p-6 sm:p-10 relative overflow-hidden w-full animate-fade-in-up"
+      dir="rtl"
+    >
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col gap-8">
-
         {/* ── Welcome header ── */}
         <div className="flex items-center gap-4 animate-fade-in-up stagger-1">
           <div className="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center font-bold text-2xl text-slate-800 dark:text-white border border-slate-200 dark:border-slate-600 shadow-inner flex-shrink-0">
             {displayName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">مرحباً، {displayName} 👋</h1>
-            <p className="text-slate-500 dark:text-slate-400">دعنا نكمل مسار تعلمك اليوم</p>
+            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+              مرحباً، {displayName} 👋
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400">
+              دعنا نكمل مسار تعلمك اليوم
+            </p>
           </div>
         </div>
 
@@ -187,20 +197,36 @@ const Dashboard = () => {
               <span className="inline-block bg-sky-100 dark:bg-sky-500/30 text-sky-700 dark:text-sky-100 font-bold px-4 py-1.5 rounded-full text-sm mb-4 border border-sky-200 dark:border-sky-400/30">
                 المسار الحالي النشط
               </span>
-              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 leading-tight">{activeRoadmap.title}</h2>
-              <p className="text-slate-600 dark:text-slate-300 text-base mb-6 line-clamp-2">{activeRoadmap.description}</p>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 leading-tight">
+                {activeRoadmap.title}
+              </h2>
+              <p className="text-slate-600 dark:text-slate-300 text-base mb-6 line-clamp-2">
+                {activeRoadmap.description}
+              </p>
               <div className="flex gap-4 mb-6 flex-wrap">
                 <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 flex-1 min-w-[110px]">
-                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">الدروس المكتملة</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{completedCount}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">
+                    الدروس المكتملة
+                  </p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">
+                    {completedCount}
+                  </p>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 flex-1 min-w-[110px]">
-                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">المستوى</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{activeRoadmap.level || "—"}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">
+                    المستوى
+                  </p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">
+                    {activeRoadmap.level || "—"}
+                  </p>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 flex-1 min-w-[110px]">
-                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">عدد الأسابيع</p>
-                  <p className="text-2xl font-bold text-slate-800 dark:text-white">{activeRoadmap.totalWeeks || 0}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">
+                    عدد الأسابيع
+                  </p>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-white">
+                    {activeRoadmap.totalWeeks || 0}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-3 flex-wrap">
@@ -220,7 +246,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex-shrink-0 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-6 flex flex-col items-center gap-3 hover-lift">
-              <p className="text-slate-600 dark:text-slate-300 font-bold text-sm">نسبة الإنجاز</p>
+              <p className="text-slate-600 dark:text-slate-300 font-bold text-sm">
+                نسبة الإنجاز
+              </p>
               <CircularProgress value={progress} />
               <p className="text-slate-500 dark:text-slate-400 text-xs text-center">
                 {progress === 100 ? "🎉 أتممت المسار!" : "استمر للأمام!"}
@@ -229,9 +257,16 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="bg-white/80 dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-3xl p-10 text-center">
-            <FontAwesomeIcon icon={faBookOpen} className="text-slate-300 dark:text-slate-600 text-6xl mb-6" />
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">لم تبدأ أي مسار بعد</h2>
-            <p className="text-slate-500 dark:text-slate-400 mb-8">اختر مساراً من المكتبة وابدأ رحلتك التعليمية</p>
+            <FontAwesomeIcon
+              icon={faBookOpen}
+              className="text-slate-300 dark:text-slate-600 text-6xl mb-6"
+            />
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">
+              لم تبدأ أي مسار بعد
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 mb-8">
+              اختر مساراً من المكتبة وابدأ رحلتك التعليمية
+            </p>
             <button
               onClick={() => navigate("/roadmaps")}
               className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-bold py-4 px-10 rounded-2xl shadow-lg hover-lift"
@@ -269,7 +304,10 @@ const Dashboard = () => {
                       {rm.level || "عام"}
                     </span>
                     <span className="text-slate-400 dark:text-slate-500 text-xs flex items-center gap-1">
-                      <FontAwesomeIcon icon={faCalendarWeek} className="text-xs" />
+                      <FontAwesomeIcon
+                        icon={faCalendarWeek}
+                        className="text-xs"
+                      />
                       {rm.totalWeeks || 0}w
                     </span>
                   </div>
@@ -282,7 +320,9 @@ const Dashboard = () => {
                   <h3 className="text-slate-800 dark:text-white font-bold mb-1 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-300 transition-all duration-300 ease-out">
                     {rm.title}
                   </h3>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2">{rm.description}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2">
+                    {rm.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -294,7 +334,10 @@ const Dashboard = () => {
           <div className="animate-fade-in-up stagger-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
-                <FontAwesomeIcon icon={faLaptopCode} className="text-violet-500 dark:text-violet-400" />
+                <FontAwesomeIcon
+                  icon={faLaptopCode}
+                  className="text-violet-500 dark:text-violet-400"
+                />
                 {hasInterests ? "تطبيقات تناسب اهتماماتك" : "تطبيقات مقترحة"}
               </h2>
               <button
@@ -320,7 +363,9 @@ const Dashboard = () => {
                   <h3 className="text-slate-800 dark:text-white font-bold mb-1 line-clamp-2 group-hover:text-violet-600 dark:group-hover:text-violet-300 flex-1 transition-all duration-300 ease-out">
                     {app.title}
                   </h3>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3">{app.description}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3">
+                    {app.description}
+                  </p>
                   {app.link ? (
                     <a
                       href={app.link}
@@ -328,7 +373,10 @@ const Dashboard = () => {
                       rel="noopener noreferrer"
                       className="mt-auto text-center py-2 bg-violet-50 dark:bg-violet-500/10 hover:bg-violet-100 dark:hover:bg-violet-500/20 text-violet-600 dark:text-violet-300 text-xs font-bold rounded-lg border border-violet-100 dark:border-violet-500/20 flex items-center justify-center gap-1 transition-all duration-300 ease-out"
                     >
-                      <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px]" />
+                      <FontAwesomeIcon
+                        icon={faExternalLinkAlt}
+                        className="text-[10px]"
+                      />
                       عرض المشروع
                     </a>
                   ) : null}
@@ -343,7 +391,10 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
-                <FontAwesomeIcon icon={faTools} className="text-emerald-500 dark:text-emerald-400" />
+                <FontAwesomeIcon
+                  icon={faTools}
+                  className="text-emerald-500 dark:text-emerald-400"
+                />
                 {hasInterests ? "أدوات تناسب اهتماماتك" : "اقتراحات الأدوات"}
               </h2>
               <button
@@ -374,7 +425,9 @@ const Dashboard = () => {
                       {categoryMap[tool.categoryId] || tool.category}
                     </span>
                   )}
-                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-4 flex-grow">{tool.description}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-4 flex-grow">
+                    {tool.description}
+                  </p>
                   <a
                     href={tool.link}
                     target="_blank"
@@ -389,7 +442,6 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

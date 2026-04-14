@@ -55,7 +55,6 @@ const Toast = ({ message, type, onClose }) => {
   );
 };
 
-
 const Spinner = () => (
   <svg
     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block"
@@ -99,7 +98,6 @@ const Settings = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
 
   const [toast, setToast] = useState(null);
 
@@ -245,16 +243,6 @@ const Settings = () => {
   // ------------------------------------------------------------------------
   // Component Render
   // ------------------------------------------------------------------------
-  if (loadingInitial) {
-    return (
-      <div className="flex h-full min-h-[60vh] items-center justify-center w-full">
-        <div className="relative w-20 h-20">
-          <div className="absolute inset-0 border-4 border-white/10 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -320,14 +308,20 @@ const Settings = () => {
         {/* Profile Settings Card */}
         <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 sm:p-10 shadow-2xl hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 ease-out">
           <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-8 pb-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
-            <FontAwesomeIcon icon={faUser} className="text-sky-500 dark:text-sky-400" />
+            <FontAwesomeIcon
+              icon={faUser}
+              className="text-sky-500 dark:text-sky-400"
+            />
             البيانات الشخصية
           </h2>
 
           <form onSubmit={handleSaveProfile} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-slate-700 dark:text-slate-200 font-medium text-sm px-1 flex items-center gap-2">
-                <FontAwesomeIcon icon={faEnvelope} className="text-slate-400 dark:text-slate-500" />{" "}
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="text-slate-400 dark:text-slate-500"
+                />{" "}
                 البريد الإلكتروني
               </label>
               <input
@@ -370,13 +364,22 @@ const Settings = () => {
                     onChange={handleChange}
                     className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-sky-500 dark:focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 appearance-none cursor-pointer transition-all duration-300 ease-out"
                   >
-                    <option value="مبتدئ" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+                    <option
+                      value="مبتدئ"
+                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    >
                       مبتدئ
                     </option>
-                    <option value="متوسط" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+                    <option
+                      value="متوسط"
+                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    >
                       متوسط
                     </option>
-                    <option value="متقدم" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+                    <option
+                      value="متقدم"
+                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    >
                       متقدم
                     </option>
                   </select>
@@ -401,7 +404,10 @@ const Settings = () => {
               {/* Daily Hours */}
               <div className="flex flex-col gap-2">
                 <label className="text-slate-700 dark:text-slate-200 font-medium text-sm px-1 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faClock} className="text-sky-600 dark:text-sky-400/70" />{" "}
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className="text-sky-600 dark:text-sky-400/70"
+                  />{" "}
                   ساعات الدراسة (يومياً)
                 </label>
                 <input
@@ -438,7 +444,10 @@ const Settings = () => {
         {/* Security / Password Card */}
         <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 sm:p-10 shadow-xl hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 ease-out">
           <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6 pb-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
-            <FontAwesomeIcon icon={faKey} className="text-amber-500 dark:text-amber-400" />
+            <FontAwesomeIcon
+              icon={faKey}
+              className="text-amber-500 dark:text-amber-400"
+            />
             الأمان وكلمة المرور
           </h2>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">

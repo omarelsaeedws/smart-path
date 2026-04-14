@@ -18,7 +18,7 @@ const GlobalLoader = () => {
       setIsVisible(false);
       setIsFadingOut(false);
       document.body.style.overflow = "unset";
-    }, 300);
+    }, 800);
   };
 
   const showLoader = () => {
@@ -27,7 +27,7 @@ const GlobalLoader = () => {
     document.body.style.overflow = "hidden";
     setTimeout(() => {
       hideLoader();
-    }, 500);
+    }, 1100);
   };
 
   // ------------------------------------------------------------------------

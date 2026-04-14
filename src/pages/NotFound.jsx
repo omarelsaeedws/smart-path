@@ -56,11 +56,11 @@ function NotFound() {
         <h1 className="mb-2 text-7xl font-extrabold tracking-tighter text-slate-900 dark:text-white drop-shadow-sm sm:text-8xl transition-colors">
           404
         </h1>
-        
+
         <h2 className="mb-4 text-2xl font-bold text-slate-800 dark:text-slate-200 sm:text-3xl transition-colors">
           الصفحة غير موجودة
         </h2>
-        
+
         <p className="mb-8 text-base text-slate-500 dark:text-slate-400 sm:text-lg transition-colors">
           يبدو أنك وصلت إلى رابط غير صحيح أو تم حذف الصفحة التي تبحث عنها.
         </p>
@@ -78,7 +78,11 @@ function NotFound() {
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           العودة للصفحة الرئيسية
         </button>

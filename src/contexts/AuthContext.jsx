@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
 
   // State to manage loading status while verifying authentication state initially
   const [loading, setLoading] = useState(true);
-  const [initialLoad, setInitialLoad] = useState(true);
 
   // ------------------------------------------------------------------------
   // Data Fetching & Refresh
@@ -61,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
             if (userDoc.exists()) {
               const profileData = userDoc.data();
-              if (user.email === "admin@smartpath.com" && profileData.role !== "admin") {
+              if (user.email === "smartpatheg@gmail.com" && profileData.role !== "admin") {
                 await setDoc(userDocRef, { role: "admin" }, { merge: true });
                 profileData.role = "admin";
               }
@@ -91,7 +90,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       setLoading(false);
-      setInitialLoad(false);
     });
 
     // Cleanup subscription on component unmount
@@ -110,13 +108,7 @@ export const AuthProvider = ({ children }) => {
   };
   return (
     <AuthContext.Provider value={value}>
-      {!initialLoad ? (
-        children
-      ) : (
-        <div className="min-h-screen bg-white flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      )}
+      {children}
     </AuthContext.Provider>
   );
 };

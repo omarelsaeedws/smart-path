@@ -31,7 +31,7 @@ const ToolsPage = () => {
   // Build categoryId → name map
   const categoryMap = useMemo(
     () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
-    [categories]
+    [categories],
   );
 
   const filtered = useMemo(() => {
@@ -48,11 +48,13 @@ const ToolsPage = () => {
 
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-10" dir="rtl">
-
       {/* Header */}
       <div className="mb-10 text-slate-900 dark:text-white text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-md flex items-center justify-center gap-4">
-          <FontAwesomeIcon icon={faTools} className="text-sky-500 dark:text-sky-400" />
+          <FontAwesomeIcon
+            icon={faTools}
+            className="text-sky-500 dark:text-sky-400"
+          />
           الأدوات التقنية
         </h1>
         <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
@@ -69,7 +71,10 @@ const ToolsPage = () => {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-5 pr-12 focus:outline-none focus:border-sky-500 dark:focus:border-sky-400 focus:bg-slate-50 dark:focus:bg-white/15 placeholder:text-slate-400 dark:placeholder:text-white/40 shadow-sm transition-all duration-300 ease-out"
         />
-        <FontAwesomeIcon icon={faSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+        <FontAwesomeIcon
+          icon={faSearch}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+        />
       </div>
 
       {/* Category Filter Pills */}
@@ -101,21 +106,13 @@ const ToolsPage = () => {
         </div>
       )}
 
-      {/* Loading */}
-      {loading && (
-        <div className="flex justify-center py-20">
-          <div className="relative w-16 h-16">
-            <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-600 rounded-full" />
-            <div className="absolute inset-0 border-4 border-sky-500 dark:border-white border-t-transparent rounded-full animate-spin" />
-          </div>
-        </div>
-      )}
 
       {/* Tools grid */}
       {!loading && filtered.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {filtered.map((tool, i) => {
-            const catName = categoryMap[tool.categoryId] || tool.category || null;
+            const catName =
+              categoryMap[tool.categoryId] || tool.category || null;
             return (
               <div
                 key={tool.id}
@@ -126,7 +123,9 @@ const ToolsPage = () => {
 
                 {/* Icon */}
                 <div className="relative z-10 mb-4">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg bg-gradient-to-br ${tool.color || "from-sky-600 to-blue-700"}`}>
+                  <div
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg bg-gradient-to-br ${tool.color || "from-sky-600 to-blue-700"}`}
+                  >
                     {tool.emoji || tool.icon || "🔧"}
                   </div>
                 </div>
@@ -153,7 +152,10 @@ const ToolsPage = () => {
                     rel="noopener noreferrer"
                     className="block w-full text-center py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-sky-500/20 text-sky-600 dark:text-sky-300 font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500/40 flex items-center justify-center gap-2 shadow-sm transition-all duration-300 ease-out"
                   >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} className="text-xs" />
+                    <FontAwesomeIcon
+                      icon={faExternalLinkAlt}
+                      className="text-xs"
+                    />
                     فتح الأداة
                   </a>
                 </div>
@@ -168,7 +170,9 @@ const ToolsPage = () => {
         <div className="text-center bg-white dark:bg-slate-800 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-3xl p-16 max-w-2xl mx-auto shadow-sm">
           <div className="text-6xl mb-4">🔧</div>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">
-            {search || activeCategoryId !== "الكل" ? "لا توجد نتائج" : "لا توجد أدوات حالياً"}
+            {search || activeCategoryId !== "الكل"
+              ? "لا توجد نتائج"
+              : "لا توجد أدوات حالياً"}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-sm">
             {search || activeCategoryId !== "الكل"
