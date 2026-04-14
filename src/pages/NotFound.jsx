@@ -20,23 +20,25 @@ function NotFound() {
   // Component Render
   // ------------------------------------------------------------------------
   return (
-    <div className="min-h-screen rtl relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-sky-500 to-blue-600 px-4 py-8">
+    <div className="min-h-screen rtl relative flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-8">
+      {/* Animated Background Orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] h-[40%] w-[40%] animate-pulse rounded-full bg-sky-300/30 blur-3xl filter transition-all duration-1000 ease-in-out"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] h-[50%] w-[50%] animate-pulse rounded-full bg-blue-400/20 blur-3xl filter transition-all duration-1000 ease-in-out delay-500"></div>
-        <div className="absolute top-[20%] right-[10%] h-[30%] w-[30%] animate-pulse rounded-full bg-white/10 blur-3xl filter transition-all duration-1000 ease-in-out delay-1000"></div>
+        <div className="absolute top-[-10%] left-[-10%] h-[40%] w-[40%] animate-pulse rounded-full bg-sky-200/50 dark:bg-sky-600/20 blur-3xl filter transition-colors"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] h-[50%] w-[50%] animate-pulse rounded-full bg-indigo-200/40 dark:bg-indigo-600/20 blur-3xl filter delay-500 transition-colors"></div>
+        <div className="absolute top-[20%] right-[10%] h-[30%] w-[30%] animate-pulse rounded-full bg-violet-200/40 dark:bg-violet-600/20 blur-3xl filter delay-1000 transition-colors"></div>
       </div>
 
       <div
-        className={`relative z-10 w-full max-w-lg transform rounded-3xl border border-white/20 bg-white/10 p-8 text-center shadow-xl backdrop-blur-xl transition-all duration-1000 ease-out sm:p-12 ${
+        className={`relative z-10 w-full max-w-lg transform rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/60 p-8 text-center shadow-xl backdrop-blur-xl sm:p-12 transition-all duration-1000 ease-out ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
         }`}
       >
+        {/* Warning Icon */}
         <div className="mb-6 flex justify-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/20 shadow-inner backdrop-blur-md">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-red-50 dark:bg-red-500/10 shadow-inner backdrop-blur-md border border-red-100 dark:border-red-500/20 transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12 text-white"
+              className="h-12 w-12 text-red-500 dark:text-red-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -51,26 +53,26 @@ function NotFound() {
           </div>
         </div>
 
-        <h1 className="mb-2 text-7xl font-bold tracking-tighter text-white drop-shadow-md sm:text-8xl">
+        <h1 className="mb-2 text-7xl font-extrabold tracking-tighter text-slate-900 dark:text-white drop-shadow-sm sm:text-8xl transition-colors">
           404
         </h1>
         
-        <h2 className="mb-4 text-2xl font-semibold text-white/90 sm:text-3xl">
+        <h2 className="mb-4 text-2xl font-bold text-slate-800 dark:text-slate-200 sm:text-3xl transition-colors">
           الصفحة غير موجودة
         </h2>
         
-        <p className="mb-8 text-base text-white/80 sm:text-lg">
+        <p className="mb-8 text-base text-slate-500 dark:text-slate-400 sm:text-lg transition-colors">
           يبدو أنك وصلت إلى رابط غير صحيح أو تم حذف الصفحة التي تبحث عنها.
         </p>
 
         <button
           onClick={() => navigate("/")}
-          className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-white/20 px-8 py-3 font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-blue-500 active:scale-95"
+          className="group relative inline-flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 font-bold text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 hover-lift transition-all duration-300 ease-out"
         >
-          <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-40"></span>
+          <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 bg-white opacity-20 group-hover:-translate-x-40 transition-all duration-700 ease-in-out"></span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1"
+            className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

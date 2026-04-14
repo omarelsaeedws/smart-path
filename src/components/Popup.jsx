@@ -48,13 +48,13 @@ const Popup = ({ isOpen, onClose, type, message }) => {
   // Component Render
   // ------------------------------------------------------------------------
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div
         className={`relative flex flex-col items-center max-w-sm w-full p-6 text-center shadow-2xl rounded-2xl backdrop-blur-xl border ${bgColor} bg-white/80 scale-100 transition-transform duration-300`}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-all duration-300 ease-out"
         >
           <svg
             className="w-6 h-6"

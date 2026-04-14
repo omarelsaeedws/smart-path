@@ -13,6 +13,7 @@ import {
   faShieldHalved,
   faLaptopCode,
 } from "@fortawesome/free-solid-svg-icons";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const location = useLocation();
@@ -38,7 +39,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   ];
 
   const sidebarClass = `
-    fixed inset-y-0 right-0 z-50 w-72 bg-white/10 backdrop-blur-2xl border-l border-white/10 shadow-2xl transition-transform duration-500 ease-in-out flex flex-col
+    fixed inset-y-0 right-0 z-50 w-72 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700/60 shadow-xl transition-all duration-300 ease-in-out flex flex-col
     ${isMobileOpen ? "translate-x-0" : "translate-x-full"} 
     lg:translate-x-0 lg:static lg:w-72
   `;
@@ -53,16 +54,20 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
 
       {/* Sidebar */}
       <aside className={sidebarClass} dir="rtl">
-        <div className="flex items-center justify-between p-8 border-b border-white/10">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700/60">
           <div className="flex items-center gap-4">
-            <img src="../public/logo.png" alt="logo" />
+            <img src="./logo.png" alt="logo" className="w-60 block dark:hidden" />
+            <img src="./logo-white.png" alt="logo" className="w-60 hidden dark:block" />
           </div>
-          <button
-            className="lg:hidden text-white/50 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
-            onClick={() => setIsMobileOpen(false)}
-          >
-            <FontAwesomeIcon icon={faXmark} className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-3">
+            
+            <button
+              className="lg:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 ease-out"
+              onClick={() => setIsMobileOpen(false)}
+            >
+              <FontAwesomeIcon icon={faXmark} className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2 no-scrollbar">
@@ -73,29 +78,32 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
                 key={item.path}
                 to={item.path}
                 onClick={() => setIsMobileOpen(false)}
-                className={`flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group relative ${
+                className={`flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 ease-out group relative ${
                   isActive
-                    ? "bg-gradient-to-r from-sky-500/20 to-indigo-500/20 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] border border-white/10"
-                    : "text-white/60 hover:text-white hover:bg-white/5"
+                    ? "bg-sky-50 dark:bg-sky-500/10 text-slate-900 dark:text-white border border-sky-100 dark:border-sky-500/20"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 hover:-translate-y-[0.15rem] hover:shadow-md"
                 }`}
               >
                 <FontAwesomeIcon
                   icon={item.icon}
-                  className={`w-5 h-5 transition-transform duration-300 ${isActive ? "text-sky-400 scale-110" : "text-white/40 group-hover:scale-110 group-hover:text-sky-300"}`}
+                  className={`w-5 h-5 transition-transform duration-300 ${isActive ? "text-sky-500 dark:text-sky-400 scale-110" : "text-slate-400 dark:text-slate-500 group-hover:scale-110 group-hover:text-sky-500 dark:group-hover:text-sky-400"}`}
                 />
                 <span className="tracking-wide">{item.name}</span>
                 {isActive && (
-                  <span className="absolute left-2 w-1.5 h-8 bg-sky-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(56,189,248,0.8)]" />
+                  <span className="absolute left-2 w-1.5 h-8 bg-sky-500 dark:bg-sky-400 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.5)]" />
                 )}
+                
               </Link>
+              
             );
           })}
+          
         </div>
 
-        <div className="p-6 border-t border-white/10 mt-auto">
+        <div className="p-6 border-t border-slate-200 dark:border-slate-700/60 mt-auto">
           {currentUser && (
             <div className="flex items-center gap-3 mb-6 px-4">
-              <div className="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center font-bold text-white shadow-inner shrink-0 text-lg">
+              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-white shrink-0 text-lg">
                 {userProfile?.displayName
                   ? userProfile.displayName.charAt(0).toUpperCase()
                   : currentUser?.displayName
@@ -105,21 +113,25 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen }) => {
                   : "U"}
               </div>
               <div className="overflow-hidden">
-                <p className="text-white font-bold text-sm truncate">
+                <p className="text-slate-900 dark:text-white font-bold text-sm truncate">
                   {userProfile?.displayName || currentUser?.displayName || "مستخدم SmartPath"}
                 </p>
-                <p className="text-white/50 text-xs truncate">{currentUser?.email}</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs truncate">{currentUser?.email}</p>
               </div>
+              
             </div>
           )}
-
+          <div className="flex items-center gap-3 mb-6 px-4">
+            <ThemeToggle className="scale-90" />
+            <p className="text-slate-900 dark:text-white font-bold text-sm truncate">تغيير الوضع</p>
+          </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-start gap-4 px-6 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300 group font-bold border border-transparent hover:border-red-500/20"
+            className="w-full flex items-center justify-start gap-4 px-6 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-500/10 ] group font-bold border border-transparent hover:border-red-500/20 hover-lift transition-all duration-300 ease-out"
           >
             <FontAwesomeIcon
               icon={faRightFromBracket}
-              className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
+              className="w-5 h-5 group- - hover-lift"
             />
             <span className="tracking-wide">تسجيل الخروج</span>
           </button>

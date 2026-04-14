@@ -48,14 +48,14 @@ const gradients = [
 
 // ── Skeleton Card ────────────────────────────────────────────────────────────
 const SkeletonCard = () => (
-  <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden animate-pulse">
-    <div className="h-44 bg-white/10" />
+  <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden animate-pulse">
+    <div className="h-44 bg-slate-200 dark:bg-slate-800" />
     <div className="p-5 space-y-3">
-      <div className="h-4 bg-white/10 rounded-full w-1/4" />
-      <div className="h-5 bg-white/10 rounded-full w-3/4" />
-      <div className="h-3 bg-white/10 rounded-full w-full" />
-      <div className="h-3 bg-white/10 rounded-full w-2/3" />
-      <div className="h-10 bg-white/10 rounded-2xl mt-4" />
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-full w-1/4" />
+      <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-full w-3/4" />
+      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-full w-full" />
+      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-full w-2/3" />
+      <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded-2xl mt-4" />
     </div>
   </div>
 );
@@ -66,14 +66,14 @@ const ApplicationCard = ({ app, index, categoryName }) => {
   const grad = gradients[index % gradients.length];
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden flex flex-col group transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(14,165,233,0.2)] hover:border-white/20">
+    <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden flex flex-col group cursor-pointer hover:-translate-y-[0.3rem] hover:shadow-lg transition-all duration-300 ease-out">
       {/* Image / Placeholder */}
       <div className="relative h-44 overflow-hidden">
         {app.image ? (
           <img
             src={app.image}
             alt={app.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover transition-all duration-300 ease-out group-hover:scale-105"
             onError={(e) => {
               e.target.style.display = "none";
               e.target.nextSibling.style.display = "flex";
@@ -105,10 +105,10 @@ const ApplicationCard = ({ app, index, categoryName }) => {
           </span>
         )}
 
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-sky-300 transition-colors leading-snug">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2 group-hover:text-sky-500 dark:group-hover:text-sky-300 leading-snug transition-all duration-300 ease-out">
           {app.title}
         </h3>
-        <p className="text-white/60 text-sm line-clamp-3 leading-relaxed flex-1">
+        <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 leading-relaxed flex-1">
           {app.description || "لا يوجد وصف لهذا التطبيق."}
         </p>
 
@@ -119,7 +119,7 @@ const ApplicationCard = ({ app, index, categoryName }) => {
               href={app.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-sky-500/30 hover:-translate-y-0.5"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg hover-lift transition-all duration-300 ease-out"
             >
               <FontAwesomeIcon icon={faExternalLinkAlt} className="text-xs" />
               عرض المشروع
@@ -127,7 +127,7 @@ const ApplicationCard = ({ app, index, categoryName }) => {
           ) : (
             <button
               disabled
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/40 font-bold text-sm cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-bold text-sm cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faLaptopCode} className="text-xs" />
               لا يوجد رابط
@@ -185,11 +185,11 @@ const ApplicationsPage = () => {
 
         {/* ── Header ── */}
         <div className="mb-10 animate-fade-in-up stagger-1">
-          <h1 className="text-4xl font-extrabold text-white drop-shadow-md flex items-center gap-3">
-            <FontAwesomeIcon icon={faLaptopCode} className="text-sky-400" />
+          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-white drop-shadow-md flex items-center gap-3">
+            <FontAwesomeIcon icon={faLaptopCode} className="text-sky-500 dark:text-sky-400" />
             التطبيقات العملية
           </h1>
-          <p className="text-white/60 mt-2">
+          <p className="text-slate-600 dark:text-slate-400 mt-2">
             استعرض المشاريع العملية وابدأ التطبيق الفعلي لما تعلمته
           </p>
         </div>
@@ -199,20 +199,20 @@ const ApplicationsPage = () => {
           {/* Row 1: Search */}
           <div className="flex gap-4">
             <div className="relative flex-1 max-w-sm">
-              <FontAwesomeIcon icon={faSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-sm" />
+              <FontAwesomeIcon icon={faSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm" />
               <input
                 type="text"
                 placeholder="ابحث عن تطبيق..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 text-white rounded-2xl py-3 pr-11 pl-4 placeholder:text-white/30 focus:outline-none focus:border-sky-400/50 focus:bg-white/10 transition-all"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-2xl py-3 pr-11 pl-4 placeholder:text-slate-400 dark:placeholder:text-white/30 focus:outline-none focus:border-sky-500 dark:focus:border-sky-500 focus:bg-slate-50 dark:focus:bg-white/10 shadow-sm transition-all duration-300 ease-out"
               />
             </div>
           </div>
 
           {/* Row 2: Level Filter */}
           <div className="flex gap-2 flex-wrap items-center">
-            <span className="text-white/40 text-xs font-medium ml-1">المستوى:</span>
+            <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">المستوى:</span>
             {LEVELS.map((lvl) => {
               const cfg = levelConfig[lvl];
               const isActive = activeLevel === lvl;
@@ -225,7 +225,7 @@ const ApplicationsPage = () => {
                       ? lvl === "الكل"
                         ? "bg-sky-500 border-sky-400 text-white shadow-[0_0_15px_rgba(14,165,233,0.4)]"
                         : `${cfg.bg} ${cfg.border} ${cfg.text} shadow-md`
-                      : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
+                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-white shadow-sm"
                   }`}
                 >
                   {lvl === "الكل" ? "الكل" : cfg.label}
@@ -237,13 +237,13 @@ const ApplicationsPage = () => {
           {/* Row 3: Category Filter (dynamic) */}
           {categories.length > 0 && (
             <div className="flex gap-2 flex-wrap items-center">
-              <span className="text-white/40 text-xs font-medium ml-1">الفئة:</span>
+              <span className="text-slate-500 dark:text-slate-500 text-xs font-medium ml-1">الفئة:</span>
               <button
                 onClick={() => setActiveCategoryId("الكل")}
                 className={`px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-300 border ${
                   activeCategoryId === "الكل"
                     ? "bg-violet-500 border-violet-400 text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
-                    : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
+                    : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-white shadow-sm"
                 }`}
               >
                 الكل
@@ -254,8 +254,8 @@ const ApplicationsPage = () => {
                   onClick={() => setActiveCategoryId(cat.id)}
                   className={`px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-300 border ${
                     activeCategoryId === cat.id
-                      ? "bg-violet-500/30 border-violet-400/50 text-violet-200 shadow-md"
-                      : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
+                      ? "bg-violet-100 dark:bg-violet-500/30 border-violet-300 dark:border-violet-400/50 text-violet-700 dark:text-violet-200 shadow-md"
+                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-white shadow-sm"
                   }`}
                 >
                   {cat.name}
@@ -274,12 +274,12 @@ const ApplicationsPage = () => {
 
         {/* ── Empty State ── */}
         {!loading && filtered.length === 0 && (
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-16 text-center shadow-xl animate-fade-in-up">
-            <FontAwesomeIcon icon={faLayerGroup} className="text-white/20 text-6xl mb-6" />
-            <h2 className="text-2xl text-white font-bold mb-3">
+          <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-3xl p-16 text-center shadow-xl animate-fade-in-up">
+            <FontAwesomeIcon icon={faLayerGroup} className="text-slate-300 dark:text-slate-600 text-6xl mb-6" />
+            <h2 className="text-2xl text-slate-800 dark:text-white font-bold mb-3">
               {applications.length === 0 ? "لا توجد تطبيقات حالياً" : "لا توجد نتائج مطابقة"}
             </h2>
-            <p className="text-white/50">
+            <p className="text-slate-500 dark:text-slate-400">
               {applications.length === 0
                 ? "سيضيف المدراء تطبيقات عملية قريباً."
                 : "جرب تغيير كلمة البحث أو تصفية المستوى أو الفئة."}
@@ -303,7 +303,7 @@ const ApplicationsPage = () => {
 
         {/* ── Stats footer ── */}
         {!loading && applications.length > 0 && (
-          <p className="text-center text-white/30 text-sm mt-10">
+          <p className="text-center text-slate-400 dark:text-slate-500 text-sm mt-10">
             {filtered.length} من {applications.length} تطبيق متاح
           </p>
         )}

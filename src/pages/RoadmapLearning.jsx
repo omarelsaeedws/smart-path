@@ -107,10 +107,10 @@ const RoadmapLearning = () => {
   // ── Render ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-white" dir="rtl">
+      <div className="flex h-screen items-center justify-center text-slate-900 dark:text-white" dir="rtl">
         <div className="relative w-20 h-20">
-          <div className="absolute inset-0 border-4 border-white/30 rounded-full" />
-          <div className="absolute inset-0 border-4 border-white border-t-transparent rounded-full animate-spin" />
+          <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-600 rounded-full" />
+          <div className="absolute inset-0 border-4 border-sky-500 dark:border-white border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
     );
@@ -119,12 +119,12 @@ const RoadmapLearning = () => {
   if (error || !roadmap) {
     return (
       <div className="flex flex-col items-center justify-center p-6 h-screen w-full" dir="rtl">
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl max-w-md w-full text-center text-white">
+        <div className="bg-white/80 dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 p-8 rounded-3xl shadow-2xl max-w-md w-full text-center text-slate-800 dark:text-white">
           <h2 className="text-2xl font-bold mb-2">عذراً</h2>
-          <p className="text-white/80 mb-6">{error || "لم يتم العثور على المسار"}</p>
+          <p className="text-slate-500 dark:text-slate-200 mb-6">{error || "لم يتم العثور على المسار"}</p>
           <button
             onClick={() => navigate("/roadmaps")}
-            className="w-full bg-sky-500 hover:bg-sky-400 font-bold py-3 px-6 rounded-xl transition"
+            className="w-full bg-sky-500 hover:bg-sky-400 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 ease-out"
           >
             العودة للمسارات
           </button>
@@ -143,7 +143,7 @@ const RoadmapLearning = () => {
       <div className="max-w-5xl mx-auto flex justify-between items-center mb-8 relative z-20 animate-fade-in-up">
         <button
           onClick={() => navigate("/dashboard")}
-          className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-2.5 px-6 rounded-2xl transition-all flex items-center gap-3 shadow-lg hover:-translate-y-0.5 cursor-pointer"
+          className="bg-white/80 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white font-bold py-2.5 px-6 rounded-2xl flex items-center gap-3 shadow-sm cursor-pointer hover-lift transition-all duration-300 ease-out"
         >
           <FontAwesomeIcon icon={faArrowRight} />
           العودة إلى لوحة التحكم
@@ -162,34 +162,34 @@ const RoadmapLearning = () => {
       <div className="max-w-5xl mx-auto relative z-10">
 
         {/* ── Header Card ──────────────────────────────────────── */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 mb-10 text-white animate-fade-in-up stagger-1">
+        <div className="bg-white/80 dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 shadow-xl dark:shadow-none rounded-3xl p-8 mb-10 text-slate-900 dark:text-white animate-fade-in-up stagger-1">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="bg-sky-500/30 px-3 py-1 rounded-full text-sm font-bold">
+            <span className="bg-sky-100 dark:bg-sky-500/30 text-sky-700 dark:text-sky-200 border border-sky-200 dark:border-transparent px-3 py-1 rounded-full text-sm font-bold">
               {roadmap.level || "عام"}
             </span>
-            <span className="bg-indigo-500/30 px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
+            <span className="bg-indigo-100 dark:bg-indigo-500/30 text-indigo-700 dark:text-indigo-200 border border-indigo-200 dark:border-transparent px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
               <FontAwesomeIcon icon={faCalendarWeek} className="text-xs" />
               {roadmap.totalWeeks || 0} أسابيع
             </span>
           </div>
           <h1 className="text-3xl font-extrabold mb-2">{roadmap.title}</h1>
-          <p className="text-white/70 leading-relaxed">{roadmap.description}</p>
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{roadmap.description}</p>
 
           {/* Progress bar */}
-          <div className="mt-6 pt-6 border-t border-white/10">
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
             <div className="flex justify-between items-end mb-2">
-              <span className="font-bold text-sky-300">التقدم الدراسي</span>
+              <span className="font-bold text-sky-600 dark:text-sky-300">التقدم الدراسي</span>
               <span className="text-3xl font-black">{progress}%</span>
             </div>
-            <div className="w-full bg-white/10 rounded-full h-4 overflow-hidden">
+            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-4 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-sky-400 to-indigo-500 h-full transition-all duration-1000 ease-out rounded-full"
+                className="bg-gradient-to-r from-sky-400 to-indigo-500 h-full rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-white/50 text-sm mt-3">
-              أنجزت <span className="text-white font-bold">{completedCount}</span> درساً من أصل{" "}
-              <span className="text-white font-bold">{totalLessons}</span> درس
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-3">
+              أنجزت <span className="text-slate-800 dark:text-white font-bold">{completedCount}</span> درساً من أصل{" "}
+              <span className="text-slate-800 dark:text-white font-bold">{totalLessons}</span> درس
             </p>
           </div>
         </div>
@@ -200,19 +200,19 @@ const RoadmapLearning = () => {
             <div key={week.id}>
               {/* Week header */}
               <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12">
+                <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg rotate-12">
                   <FontAwesomeIcon icon={faCalendarWeek} className="text-white text-xl -rotate-12" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white">الأسبوع {week.weekNumber}</h2>
+                  <h2 className="text-2xl font-black text-slate-900 dark:text-white">الأسبوع {week.weekNumber}</h2>
                   {week.weekGoal && (
-                    <p className="text-sky-200 text-sm font-medium">{week.weekGoal}</p>
+                    <p className="text-sky-600 dark:text-sky-200 text-sm font-medium">{week.weekGoal}</p>
                   )}
                 </div>
               </div>
 
               {/* Lessons */}
-              <div className="grid gap-4 border-r-2 border-white/10 pr-6 mr-6">
+              <div className="grid gap-4 border-r-2 border-slate-200 dark:border-slate-700 pr-6 mr-6">
                 {week.lessons.map((lesson) => {
                   const isCompleted = completedLessons.includes(lesson.id);
                   const unlocked = isLessonUnlocked(completedLessons, allLessons, lesson.id);
@@ -221,12 +221,12 @@ const RoadmapLearning = () => {
                   return (
                     <div
                       key={lesson.id}
-                      className={`bg-white/5 border rounded-2xl overflow-hidden transition-all duration-300 ${
+                      className={`bg-white/60 dark:bg-slate-800 border rounded-2xl overflow-hidden transition-all duration-300 ${
                         isExpanded
-                          ? "ring-2 ring-sky-400/50 bg-white/10 border-white/20"
+                          ? "ring-2 ring-sky-500/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 shadow-md"
                           : unlocked
-                          ? "border-white/10 hover:bg-white/8 cursor-pointer"
-                          : "border-white/5 opacity-60 cursor-not-allowed"
+                          ? "border-slate-200 dark:border-slate-700 hover:bg-white/90 dark:hover:bg-slate-700 cursor-pointer shadow-sm"
+                          : "border-slate-200 dark:border-slate-700 opacity-60 cursor-not-allowed shadow-none"
                       }`}
                     >
                       {/* Lesson header row */}
@@ -239,32 +239,32 @@ const RoadmapLearning = () => {
                       >
                         {/* Status icon */}
                         <div
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-lg flex-shrink-0 transition-colors ${
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-sm flex-shrink-0 transition-colors ${
                             isCompleted
-                              ? "bg-green-500"
+                              ? "bg-green-500 text-white"
                               : unlocked
-                              ? "bg-sky-500"
-                              : "bg-white/10"
+                              ? "bg-sky-500 text-white"
+                              : "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-white"
                           }`}
                         >
                           {isCompleted ? (
-                            <FontAwesomeIcon icon={faCheckCircle} className="text-white" />
+                            <FontAwesomeIcon icon={faCheckCircle} />
                           ) : !unlocked ? (
-                            <FontAwesomeIcon icon={faLock} className="text-white/50" />
+                            <FontAwesomeIcon icon={faLock} className="text-slate-400 dark:text-slate-400" />
                           ) : (
-                            <span className="text-white text-sm">{lesson.order || "•"}</span>
+                            <span className="text-sm">{lesson.order || "•"}</span>
                           )}
                         </div>
 
                         <div className="flex-1">
                           <h4
-                            className={`text-lg font-bold ${
-                              isCompleted ? "text-white/40 line-through" : "text-white"
+                            className={`text-lg font-bold transition-colors duration-300 ${
+                              isCompleted ? "text-slate-400 dark:text-slate-500 line-through" : "text-slate-900 dark:text-white"
                             }`}
                           >
                             {lesson.title}
                           </h4>
-                          <div className="flex items-center gap-3 text-white/50 text-xs mt-1">
+                          <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-xs mt-1">
                             {lesson.estimatedHours && (
                               <span className="flex items-center gap-1">
                                 <FontAwesomeIcon icon={faClock} />
@@ -272,7 +272,7 @@ const RoadmapLearning = () => {
                               </span>
                             )}
                             {!unlocked && (
-                              <span className="text-amber-400/70 font-medium">
+                              <span className="text-amber-600 dark:text-amber-400/70 font-medium">
                                 🔒 أكمل الدرس السابق أولاً
                               </span>
                             )}
@@ -282,7 +282,7 @@ const RoadmapLearning = () => {
                         {unlocked && (
                           <FontAwesomeIcon
                             icon={isExpanded ? faChevronUp : faChevronDown}
-                            className="text-white/30 w-4 h-4 flex-shrink-0"
+                            className="text-slate-400 dark:text-slate-500 w-4 h-4 flex-shrink-0"
                           />
                         )}
                       </div>
@@ -293,12 +293,12 @@ const RoadmapLearning = () => {
                           isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
                         }`}
                       >
-                        <div className="p-6 pt-0 bg-black/20 border-t border-white/10">
+                        <div className="p-6 pt-0 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
                           {/* Description */}
                           {lesson.description && (
                             <div className="py-4">
-                              <h5 className="text-sky-300 font-bold mb-2">ماذا ستتعلم؟</h5>
-                              <p className="text-white/80 text-sm leading-relaxed whitespace-pre-wrap">
+                              <h5 className="text-sky-600 dark:text-sky-300 font-bold mb-2">ماذا ستتعلم؟</h5>
+                              <p className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed whitespace-pre-wrap">
                                 {lesson.description}
                               </p>
                             </div>
@@ -311,7 +311,7 @@ const RoadmapLearning = () => {
                                 const videoId = getYouTubeId(lesson.resourceLink);
                                 if (videoId) {
                                   return (
-                                    <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-white/10" style={{ paddingTop: "56.25%" }}>
+                                    <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-slate-200 dark:border-slate-700" style={{ paddingTop: "56.25%" }}>
                                       <iframe
                                         className="absolute top-0 left-0 w-full h-full"
                                         src={`https://www.youtube.com/embed/${videoId}`}
@@ -326,7 +326,7 @@ const RoadmapLearning = () => {
                                     href={lesson.resourceLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/30 text-sky-300 px-4 py-2 rounded-xl text-sm font-bold transition"
+                                    className="inline-flex items-center gap-2 bg-sky-50 dark:bg-sky-500/20 hover:bg-sky-100 dark:hover:bg-sky-500/30 border border-sky-200 dark:border-sky-400/30 text-sky-600 dark:text-sky-300 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ease-out"
                                   >
                                     <FontAwesomeIcon icon={faLink} />
                                     رابط المصدر التعليمي
@@ -339,7 +339,7 @@ const RoadmapLearning = () => {
                           {/* Action button */}
                           <div className="flex justify-end mt-4">
                             {isCompleted ? (
-                              <span className="flex items-center gap-2 px-6 py-2.5 bg-green-500/20 text-green-300 border border-green-500/30 rounded-xl font-bold text-sm">
+                              <span className="flex items-center gap-2 px-6 py-2.5 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/30 rounded-xl font-bold text-sm">
                                 <FontAwesomeIcon icon={faCheckCircle} />
                                 تم الإنجاز
                               </span>
@@ -349,7 +349,7 @@ const RoadmapLearning = () => {
                                   e.stopPropagation();
                                   setQuizLesson(lesson);
                                 }}
-                                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white rounded-xl font-bold text-sm transition-all shadow-lg hover:-translate-y-0.5"
+                                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white rounded-xl font-bold text-sm shadow-lg hover-lift transition-all duration-300 ease-out"
                               >
                                 <FontAwesomeIcon icon={faArrowRight} />
                                 إنهاء الدرس واجتياز الاختبار
@@ -363,7 +363,7 @@ const RoadmapLearning = () => {
                 })}
 
                 {week.lessons.length === 0 && (
-                  <p className="text-white/40 text-sm text-center py-4">
+                  <p className="text-slate-400 dark:text-slate-500 text-sm text-center py-4">
                     لا توجد دروس في هذا الأسبوع بعد.
                   </p>
                 )}
@@ -372,8 +372,8 @@ const RoadmapLearning = () => {
           ))}
 
           {weeks.length === 0 && (
-            <div className="bg-white/10 border border-white/20 rounded-3xl p-12 text-center text-white">
-              <p className="text-white/60">لا توجد أسابيع في هذا المسار بعد.</p>
+            <div className="bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center text-slate-800 dark:text-white">
+              <p className="text-slate-500 dark:text-slate-400">لا توجد أسابيع في هذا المسار بعد.</p>
             </div>
           )}
         </div>

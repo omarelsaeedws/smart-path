@@ -86,7 +86,7 @@ function App() {
           path="/resources"
           element={
             <ProtectedRoute>
-              <MainLayout>
+              <MainLayout backgroundType="dashboard">
                 <ResourcesPage />
               </MainLayout>
             </ProtectedRoute>
@@ -110,7 +110,7 @@ function App() {
           path="/settings"
           element={
             <ProtectedRoute>
-              <MainLayout>
+              <MainLayout backgroundType="dashboard">
                 <Settings />
               </MainLayout>
             </ProtectedRoute>
@@ -122,9 +122,7 @@ function App() {
           path="/admin"
           element={
             <AdminRoute>
-              <MainLayout backgroundType="dashboard" hideSidebar={true}>
-                <AdminPage />
-              </MainLayout>
+              <AdminPage />
             </AdminRoute>
           }
         />

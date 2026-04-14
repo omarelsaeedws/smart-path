@@ -38,11 +38,10 @@ const Onboarding = () => {
   const [step, setStep] = useState(1); // 1=level, 2=hours, 3=interests
   const [level, setLevel] = useState("");
   const [dailyStudyHours, setDailyStudyHours] = useState(2);
-  const [interests, setInterests] = useState([]); // array of categoryIds
+  const [interests, setInterests] = useState([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Dynamic categories from Firestore
   const [categories, setCategories] = useState([]);
   const [catsLoading, setCatsLoading] = useState(true);
 
@@ -71,14 +70,7 @@ const Onboarding = () => {
       const userRef = doc(db, "users", currentUser.uid);
       await setDoc(
         userRef,
-        {
-          level,
-          dailyStudyHours,
-          interests, // array of categoryIds
-          isOnboarded: true,
-          onboardingCompleted: true,
-          updatedAt: serverTimestamp(),
-        },
+        { level, dailyStudyHours, interests, isOnboarded: true, onboardingCompleted: true, updatedAt: serverTimestamp() },
         { merge: true }
       );
       await refreshUserProfile();
@@ -100,11 +92,11 @@ const Onboarding = () => {
   const steps = ["مستواك", "وقتك", "اهتماماتك"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0c1f3f] via-[#0f3460] to-[#164e8a] flex items-center justify-center p-4" dir="rtl">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4" dir="rtl">
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-sky-400/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-sky-300/20 dark:bg-sky-500/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-300/20 dark:bg-indigo-500/10 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative w-full max-w-lg">
@@ -113,8 +105,8 @@ const Onboarding = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-sky-400 to-indigo-500 shadow-xl shadow-sky-500/30 mb-6 rotate-6">
             <FontAwesomeIcon icon={faGraduationCap} className="text-white text-3xl -rotate-6" />
           </div>
-          <h1 className="text-3xl font-extrabold text-white mb-2">مرحباً بك في SmartPath</h1>
-          <p className="text-white/60">أخبرنا عنك لنخصص تجربتك</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">مرحباً بك في SmartPath</h1>
+          <p className="text-slate-500 dark:text-slate-400">أخبرنا عنك لنخصص تجربتك</p>
         </div>
 
         {/* Step indicators */}
@@ -127,32 +119,32 @@ const Onboarding = () => {
                     ? "bg-green-500 text-white"
                     : step === i + 1
                     ? "bg-sky-500 text-white shadow-[0_0_12px_rgba(56,189,248,0.6)]"
-                    : "bg-white/10 text-white/40"
+                    : "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500"
                 }`}>
                   {step > i + 1 ? "✓" : i + 1}
                 </div>
-                <span className={`text-xs font-medium ${step === i + 1 ? "text-sky-300" : "text-white/40"}`}>
+                <span className={`text-xs font-medium ${step === i + 1 ? "text-sky-600 dark:text-sky-400" : "text-slate-400 dark:text-slate-500"}`}>
                   {s}
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`flex-1 h-0.5 mb-5 transition-all ${step > i + 1 ? "bg-green-500" : "bg-white/10"}`} />
+                <div className={`flex-1 h-0.5 mb-5 transition-all ${step > i + 1 ? "bg-green-500" : "bg-slate-200 dark:bg-slate-700"}`} />
               )}
             </React.Fragment>
           ))}
         </div>
 
         {/* Card */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-xl">
 
-          {/* ── STEP 1: Level ─────────────────────────────── */}
+          {/* STEP 1: Level */}
           {step === 1 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <FontAwesomeIcon icon={faGraduationCap} className="text-sky-400" />
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <FontAwesomeIcon icon={faGraduationCap} className="text-sky-500 dark:text-sky-400" />
                 ما مستواك التقني الحالي؟
               </h2>
-              <p className="text-white/50 text-sm mb-6">سنختار لك مسارات مناسبة بناءً على مستواك</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">سنختار لك مسارات مناسبة بناءً على مستواك</p>
               <div className="space-y-3">
                 {LEVELS.map((l) => (
                   <button
@@ -160,38 +152,38 @@ const Onboarding = () => {
                     onClick={() => setLevel(l.value)}
                     className={`w-full text-right p-4 rounded-2xl border transition-all duration-200 ${
                       level === l.value
-                        ? "bg-sky-500/30 border-sky-400 shadow-[0_0_16px_rgba(56,189,248,0.3)]"
-                        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30"
+                        ? "bg-sky-50 dark:bg-sky-500/20 border-sky-400 dark:border-sky-500 shadow-[0_0_12px_rgba(56,189,248,0.15)]"
+                        : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-600"
                     }`}
                   >
-                    <p className="font-bold text-white">{l.label}</p>
-                    <p className="text-white/50 text-sm">{l.desc}</p>
+                    <p className="font-bold text-slate-900 dark:text-white">{l.label}</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">{l.desc}</p>
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* ── STEP 2: Daily Hours ───────────────────────── */}
+          {/* STEP 2: Daily Hours */}
           {step === 2 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <FontAwesomeIcon icon={faClock} className="text-sky-400" />
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <FontAwesomeIcon icon={faClock} className="text-sky-500 dark:text-sky-400" />
                 كم ساعة يمكنك الدراسة يومياً؟
               </h2>
-              <p className="text-white/50 text-sm mb-8">هذا يساعدنا في تقدير المدة الزمنية لكل مسار</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-8">هذا يساعدنا في تقدير المدة الزمنية لكل مسار</p>
               <div className="text-center">
-                <div className="text-7xl font-black text-white mb-2 tabular-nums">{dailyStudyHours}</div>
-                <p className="text-sky-300 font-bold mb-8">ساعة / يوم</p>
+                <div className="text-7xl font-black text-slate-900 dark:text-white mb-2 tabular-nums">{dailyStudyHours}</div>
+                <p className="text-sky-600 dark:text-sky-400 font-bold mb-8">ساعة / يوم</p>
                 <input
                   type="range"
                   min="1"
                   max="12"
                   value={dailyStudyHours}
                   onChange={(e) => setDailyStudyHours(Number(e.target.value))}
-                  className="w-full accent-sky-400 cursor-pointer"
+                  className="w-full accent-sky-500 cursor-pointer"
                 />
-                <div className="flex justify-between text-white/40 text-xs mt-2">
+                <div className="flex justify-between text-slate-400 dark:text-slate-500 text-xs mt-2">
                   <span>1 ساعة</span>
                   <span>12 ساعة</span>
                 </div>
@@ -199,31 +191,28 @@ const Onboarding = () => {
             </div>
           )}
 
-          {/* ── STEP 3: Interests (Dynamic from Firestore) ── */}
+          {/* STEP 3: Interests */}
           {step === 3 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
-                <FontAwesomeIcon icon={faLayerGroup} className="text-sky-400" />
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                <FontAwesomeIcon icon={faLayerGroup} className="text-sky-500 dark:text-sky-400" />
                 ما الذي يثير اهتمامك؟
               </h2>
-              <p className="text-white/50 text-sm mb-5">اختر اهتماماً واحداً أو أكثر من المجالات المتاحة</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-5">اختر اهتماماً واحداً أو أكثر من المجالات المتاحة</p>
 
               {catsLoading ? (
-                /* Loading spinner */
                 <div className="flex justify-center py-10">
                   <div className="relative w-12 h-12">
-                    <div className="absolute inset-0 border-4 border-white/20 rounded-full" />
-                    <div className="absolute inset-0 border-4 border-sky-400 border-t-transparent rounded-full animate-spin" />
+                    <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-700 rounded-full" />
+                    <div className="absolute inset-0 border-4 border-sky-500 border-t-transparent rounded-full animate-spin" />
                   </div>
                 </div>
               ) : categories.length === 0 ? (
-                /* No categories yet */
                 <div className="text-center py-8">
-                  <FontAwesomeIcon icon={faLayerGroup} className="text-white/20 text-4xl mb-3" />
-                  <p className="text-white/50 text-sm">لا توجد فئات متاحة بعد. تواصل مع المدير.</p>
+                  <FontAwesomeIcon icon={faLayerGroup} className="text-slate-300 dark:text-slate-600 text-4xl mb-3" />
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">لا توجد فئات متاحة بعد. تواصل مع المدير.</p>
                 </div>
               ) : (
-                /* Dynamic category grid */
                 <div className="grid grid-cols-2 gap-3">
                   {categories.map((cat, idx) => {
                     const selected = interests.includes(cat.id);
@@ -234,21 +223,20 @@ const Onboarding = () => {
                         onClick={() => toggleInterest(cat.id)}
                         className={`flex items-center gap-3 p-3 rounded-2xl border text-right transition-all duration-200 ${
                           selected
-                            ? "bg-sky-500/30 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
-                            : "bg-white/5 border-white/10 hover:bg-white/10"
+                            ? "bg-sky-50 dark:bg-sky-500/20 border-sky-400 dark:border-sky-500 shadow-[0_0_10px_rgba(56,189,248,0.15)]"
+                            : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-700"
                         }`}
                       >
-                        {/* Letter avatar */}
                         <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${selected ? "from-sky-400 to-indigo-600" : gradient} opacity-${selected ? "100" : "80"}`}>
                           <span className="text-white font-black text-sm">
                             {cat.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <span className="text-white font-medium text-sm line-clamp-1">{cat.name}</span>
+                          <span className="text-slate-800 dark:text-white font-medium text-sm line-clamp-1">{cat.name}</span>
                         </div>
                         {selected && (
-                          <FontAwesomeIcon icon={faCheckCircle} className="text-sky-400 text-sm flex-shrink-0" />
+                          <FontAwesomeIcon icon={faCheckCircle} className="text-sky-500 dark:text-sky-400 text-sm flex-shrink-0" />
                         )}
                       </button>
                     );
@@ -256,22 +244,21 @@ const Onboarding = () => {
                 </div>
               )}
 
-              {/* Selected count */}
               {interests.length > 0 && (
-                <p className="text-sky-300 text-xs text-center mt-3 font-medium">
+                <p className="text-sky-600 dark:text-sky-400 text-xs text-center mt-3 font-medium">
                   ✓ تم اختيار {interests.length} {interests.length === 1 ? "اهتمام" : "اهتمامات"}
                 </p>
               )}
-              {error && <p className="text-red-400 text-sm mt-3 text-center">{error}</p>}
+              {error && <p className="text-red-500 dark:text-red-400 text-sm mt-3 text-center">{error}</p>}
             </div>
           )}
 
-          {/* ── Navigation ────────────────────────────────── */}
+          {/* Navigation */}
           <div className="flex gap-3 mt-8">
             {step > 1 && (
               <button
                 onClick={() => { setStep((s) => s - 1); setError(""); }}
-                className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl transition"
+                className="flex-1 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white font-bold rounded-2xl transition-all duration-300 ease-out"
               >
                 رجوع
               </button>
@@ -283,7 +270,7 @@ const Onboarding = () => {
                 className={`flex-1 py-3 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 ${
                   canProceed()
                     ? "bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white shadow-lg hover:-translate-y-0.5"
-                    : "bg-white/10 text-white/40 cursor-not-allowed"
+                    : "bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
                 }`}
               >
                 التالي
@@ -295,7 +282,7 @@ const Onboarding = () => {
                 onClick={handleSubmit}
                 className={`flex-1 py-3 font-bold rounded-2xl transition-all ${
                   saving || interests.length === 0 || catsLoading
-                    ? "bg-white/10 text-white/40 cursor-not-allowed"
+                    ? "bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
                     : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg hover:-translate-y-0.5"
                 }`}
               >
