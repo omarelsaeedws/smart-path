@@ -1,35 +1,50 @@
 import { db } from "../lib/firebase";
-import { 
-  collection, 
-  addDoc, 
-  deleteDoc, 
-  doc, 
-  query, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
 } from "firebase/firestore";
 
-// Subscribe to Resources
+// ── Subscribe ──────────────────────────────────────────────────────────────
+
 export const subscribeToResources = (callback) => {
   const q = query(collection(db, "resources"), orderBy("createdAt", "desc"));
   return onSnapshot(q, (snapshot) => {
-    const resources = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const resources = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     callback(resources);
   });
 };
 
 export const subscribeToTools = subscribeToResources;
 
-// Add Resource
+// ── CRUD ───────────────────────────────────────────────────────────────────
+
+/**
+ * Add a new resource. logoUrl is stored directly from the form (URL string).
+ */
 export const addResource = async (resourceData) => {
-  await addDoc(collection(db, "resources"), {
+  return addDoc(collection(db, "resources"), {
     ...resourceData,
-    createdAt: serverTimestamp()
+    createdAt: serverTimestamp(),
   });
 };
 
-// Delete Resource
+/**
+ * Update existing resource fields (including logoUrl as a URL string).
+ */
+export const updateResource = async (resourceId, data) => {
+  return updateDoc(doc(db, "resources", resourceId), data);
+};
+
+/**
+ * Delete resource document from Firestore.
+ */
 export const deleteResource = async (resourceId) => {
-  await deleteDoc(doc(db, "resources", resourceId));
+  return deleteDoc(doc(db, "resources", resourceId));
 };

@@ -6,8 +6,6 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
-  query,
-  orderBy,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -18,9 +16,13 @@ const COLLECTION = "categories";
  * Returns an unsubscribe function.
  */
 export function subscribeToCategories(callback) {
-  const q = query(collection(db, COLLECTION), orderBy("name", "asc"));
-  return onSnapshot(q, (snap) => {
-    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  // NOTE: No orderBy here — avoids Firestore composite index requirement in production.
+  // Categories are sorted client-side instead.
+  return onSnapshot(collection(db, COLLECTION), (snap) => {
+    const cats = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+    callback(cats);
   });
 }
 

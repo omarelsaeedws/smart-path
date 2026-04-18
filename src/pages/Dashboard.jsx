@@ -412,8 +412,24 @@ const Dashboard = () => {
                   className="bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:bg-white dark:hover:bg-slate-700 group flex flex-col h-full hover-lift transition-all duration-300 ease-out"
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg flex-shrink-0">
-                      <FontAwesomeIcon icon={faTools} />
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      {tool.logoUrl ? (
+                        <img
+                          src={tool.logoUrl}
+                          alt={tool.name}
+                          className="w-full h-full object-contain p-1"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                      ) : null}
+                      <span
+                        className="w-full h-full items-center justify-center text-emerald-600 dark:text-emerald-400 text-lg"
+                        style={{ display: tool.logoUrl ? "none" : "flex" }}
+                      >
+                        <FontAwesomeIcon icon={faTools} />
+                      </span>
                     </div>
                     <h3 className="text-slate-800 dark:text-white font-bold line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-all duration-300 ease-out">
                       {tool.name}

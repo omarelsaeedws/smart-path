@@ -72,6 +72,18 @@ const Landing = () => {
                 >
                   المميزات
                 </a>
+                <Link
+                  to="/terms"
+                  className="text-slate-500 hover:text-sky-500 dark:text-slate-400 dark:hover:text-sky-400 font-medium transition-all duration-300 ease-out"
+                >
+                  الشروط والأحكام
+                </Link>
+                <Link
+                  to="/privacy"
+                  className="text-slate-500 hover:text-sky-500 dark:text-slate-400 dark:hover:text-sky-400 font-medium transition-all duration-300 ease-out"
+                >
+                  سياسة الخصوصية
+                </Link>
               </nav>
 
               <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
@@ -104,6 +116,20 @@ const Landing = () => {
                 >
                   المميزات
                 </a>
+                <Link
+                  to="/terms"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-slate-600 hover:text-sky-500 dark:text-slate-300 dark:hover:text-sky-400 font-bold transition-all duration-300 ease-out"
+                >
+                  الشروط والأحكام
+                </Link>
+                <Link
+                  to="/privacy"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-slate-600 hover:text-sky-500 dark:text-slate-300 dark:hover:text-sky-400 font-bold transition-all duration-300 ease-out"
+                >
+                  سياسة الخصوصية
+                </Link>
 
                 <div className="w-full h-px bg-slate-100 dark:bg-slate-800 my-1"></div>
 
@@ -227,18 +253,18 @@ const Landing = () => {
                 &copy; {new Date().getFullYear()} SmartPath. جميع الحقوق محفوظة.
               </p>
               <div className="flex gap-4 mt-4 md:mt-0">
-                <a
-                  href="#"
+                <Link
+                  to="/terms"
                   className="hover:text-slate-600 dark:hover:text-slate-400 transition-all duration-300 ease-out"
                 >
                   الشروط والأحكام
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/privacy"
                   className="hover:text-slate-600 dark:hover:text-slate-400 transition-all duration-300 ease-out"
                 >
                   سياسة الخصوصية
-                </a>
+                </Link>
               </div>
             </div>
           </div>

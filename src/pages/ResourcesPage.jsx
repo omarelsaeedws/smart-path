@@ -121,13 +121,35 @@ const ToolsPage = () => {
                 {/* Glow */}
                 <div className="absolute -right-10 -top-10 w-32 h-32 bg-sky-500/10 rounded-full blur-3xl group-hover:bg-sky-400/20 pointer-events-none transition-all duration-300 ease-out" />
 
-                {/* Icon */}
+                {/* Logo / Icon */}
                 <div className="relative z-10 mb-4">
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg bg-gradient-to-br ${tool.color || "from-sky-600 to-blue-700"}`}
-                  >
-                    {tool.emoji || tool.icon || "🔧"}
-                  </div>
+                  {tool.logoUrl ? (
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+                      <img
+                        src={tool.logoUrl}
+                        alt={tool.name}
+                        loading="lazy"
+                        className="w-10 h-10 object-contain"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
+                        }}
+                      />
+                      {/* fallback hidden by default */}
+                      <div
+                        style={{ display: "none" }}
+                        className={`w-full h-full rounded-2xl items-center justify-center text-2xl bg-gradient-to-br ${tool.color || "from-sky-600 to-blue-700"}`}
+                      >
+                        {tool.emoji || tool.icon || "🔧"}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg bg-gradient-to-br ${tool.color || "from-sky-600 to-blue-700"}`}
+                    >
+                      {tool.emoji || tool.icon || "🔧"}
+                    </div>
+                  )}
                 </div>
 
                 {/* Category badge */}

@@ -27,17 +27,21 @@ import {
 import {
   subscribeToResources,
   addResource,
+  updateResource,
   deleteResource,
 } from "../services/resourceService";
 import {
   getRoadmaps,
   addRoadmap,
+  updateRoadmap,
   deleteRoadmap,
   getWeeks,
   addWeek,
+  updateWeek,
   deleteWeek,
   getLessons,
   addLesson,
+  updateLesson,
   deleteLesson,
 } from "../services/roadmapService";
 import {
@@ -102,7 +106,23 @@ const AdminPage = () => {
     categoryId: "",
     description: "",
     link: "",
+    logoUrl: "",
   });
+
+  // Edit Resource modal
+  const [editingResource, setEditingResource] = useState(null);
+  const [editResourceForm, setEditResourceForm] = useState({});
+  // Edit Roadmap modal
+  const [editingRoadmap, setEditingRoadmap] = useState(null);
+  const [editRoadmapForm, setEditRoadmapForm] = useState({});
+
+  // Edit Week modal
+  const [editingWeek, setEditingWeek] = useState(null);
+  const [editWeekForm, setEditWeekForm] = useState({});
+
+  // Edit Lesson modal
+  const [editingLesson, setEditingLesson] = useState(null);
+  const [editLessonForm, setEditLessonForm] = useState({});
 
   // Applications state
   const [applications, setApplications] = useState([]);
@@ -218,10 +238,94 @@ const AdminPage = () => {
 
   const handleAddResource = async (e) => {
     e.preventDefault();
-
     if (!resourceForm.name || !resourceForm.link) return;
     await addResource(resourceForm);
-    setResourceForm({ name: "", category: "", description: "", link: "" });
+    setResourceForm({ name: "", category: "", categoryId: "", description: "", link: "", logoUrl: "" });
+  };
+
+  const handleOpenEditResource = (res) => {
+    setEditingResource(res);
+    setEditResourceForm({
+      name: res.name || "",
+      categoryId: res.categoryId || "",
+      description: res.description || "",
+      link: res.link || "",
+      logoUrl: res.logoUrl || "",
+    });
+  };
+
+  const handleSaveEditResource = async (e) => {
+    e.preventDefault();
+    await updateResource(editingResource.id, editResourceForm);
+    setEditingResource(null);
+  };
+
+  // Roadmap edit handlers
+  const handleOpenEditRoadmap = (rm) => {
+    setEditingRoadmap(rm);
+    setEditRoadmapForm({
+      title: rm.title || "",
+      description: rm.description || "",
+      categoryId: rm.categoryId || "",
+      level: rm.level || "مبتدئ",
+      totalWeeks: rm.totalWeeks || 4,
+    });
+  };
+
+  const handleSaveEditRoadmap = async (e) => {
+    e.preventDefault();
+    await updateRoadmap(editingRoadmap.id, {
+      ...editRoadmapForm,
+      totalWeeks: Number(editRoadmapForm.totalWeeks),
+    });
+    const updated = await getRoadmaps();
+    setRoadmaps(updated);
+    setEditingRoadmap(null);
+  };
+
+  // Week edit handlers
+  const handleOpenEditWeek = (week) => {
+    setEditingWeek(week);
+    setEditWeekForm({
+      weekNumber: week.weekNumber || 1,
+      weekGoal: week.weekGoal || "",
+    });
+  };
+
+  const handleSaveEditWeek = async (e) => {
+    e.preventDefault();
+    await updateWeek(selectedRoadmapId, editingWeek.id, {
+      ...editWeekForm,
+      weekNumber: Number(editWeekForm.weekNumber),
+    });
+    const updated = await getWeeks(selectedRoadmapId);
+    setRoadmapWeeks(updated);
+    setEditingWeek(null);
+  };
+
+  // Lesson edit handlers
+  const handleOpenEditLesson = (lesson) => {
+    setEditingLesson(lesson);
+    setEditLessonForm({
+      title: lesson.title || "",
+      description: lesson.description || "",
+      source: lesson.source || "YouTube",
+      resourceLink: lesson.resourceLink || "",
+      estimatedHours: lesson.estimatedHours || 2,
+      order: lesson.order || 1,
+    });
+  };
+
+  const handleSaveEditLesson = async (e) => {
+    e.preventDefault();
+    await updateLesson(selectedRoadmapId, selectedWeekId, editingLesson.id, {
+      ...editLessonForm,
+      estimatedHours: Number(editLessonForm.estimatedHours),
+      order: Number(editLessonForm.order),
+    });
+    const updated = await getLessons(selectedRoadmapId, selectedWeekId);
+    setWeekLessons(updated);
+    setEditingLesson(null);
   };
 
   const handleDeleteResource = async (resourceId) => {
@@ -831,6 +935,31 @@ const AdminPage = () => {
                     className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none text-left transition-all duration-300 ease-out"
                     dir="ltr"
                   />
+                  {/* Logo URL */}
+                  <div className="space-y-1.5">
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">رابط صورة الأداة (اختياري)</span>
+                    <input
+                      type="url"
+                      placeholder="https://example.com/logo.png"
+                      value={resourceForm.logoUrl}
+                      dir="ltr"
+                      onChange={(e) =>
+                        setResourceForm({ ...resourceForm, logoUrl: e.target.value })
+                      }
+                      className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none text-left text-sm transition-all duration-300 ease-out"
+                    />
+                    {resourceForm.logoUrl && (
+                      <div className="flex items-center gap-3 pt-1">
+                        <img
+                          src={resourceForm.logoUrl}
+                          alt="preview"
+                          className="w-10 h-10 object-contain rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1"
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                        <span className="text-xs text-slate-400">معاينة</span>
+                      </div>
+                    )}
+                  </div>
                   <button
                     type="submit"
                     className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-lg shadow-lg flex justify-center items-center gap-2 transition-all duration-300 ease-out"
@@ -849,21 +978,47 @@ const AdminPage = () => {
                       key={res.id}
                       className="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 relative group"
                     >
-                      <span className="inline-block px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded text-xs mb-2">
-                        {res.category}
-                      </span>
-                      <h4 className="text-lg font-bold text-slate-800 dark:text-white pr-8">
-                        {res.name}
-                      </h4>
-                      <p className="text-sm text-slate-800 dark:text-slate-300 line-clamp-2">
-                        {res.description}
-                      </p>
-                      <button
-                        onClick={() => handleDeleteResource(res.id)}
-                        className="absolute top-4 left-4 text-red-400 hover:text-red-300 opacity-50 group-hover:opacity-100 transition-all duration-300 ease-out"
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </button>
+                      <div className="flex items-start gap-3">
+                        {res.logoUrl ? (
+                          <img
+                            src={res.logoUrl}
+                            alt={res.name}
+                            loading="lazy"
+                            className="w-10 h-10 object-contain rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1 shrink-0"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg shrink-0">
+                            {res.name?.charAt(0)?.toUpperCase() || "🔧"}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <span className="inline-block px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded text-xs mb-1">
+                            {res.category}
+                          </span>
+                          <h4 className="text-base font-bold text-slate-800 dark:text-white truncate">
+                            {res.name}
+                          </h4>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                            {res.description}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="absolute top-3 left-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <button
+                          onClick={() => handleOpenEditResource(res)}
+                          className="text-sky-400 hover:text-sky-300 p-1.5"
+                          title="تعديل"
+                        >
+                          <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteResource(res.id)}
+                          className="text-red-400 hover:text-red-300 p-1.5"
+                          title="حذف"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1064,6 +1219,13 @@ const AdminPage = () => {
                           </div>
                         </button>
                         <button
+                          onClick={() => handleOpenEditRoadmap(rm)}
+                          className="text-sky-400 hover:text-sky-300 px-3 py-1.5 rounded-lg hover:bg-sky-500/10 transition-all duration-300 ease-out"
+                          title="تعديل"
+                        >
+                          <FontAwesomeIcon icon={faPenToSquare} />
+                        </button>
+                        <button
                           onClick={() => handleDeleteRoadmap(rm.id)}
                           className="text-red-400 hover:text-red-300 px-3 py-1.5 rounded-lg hover:bg-red-500/10 transition-all duration-300 ease-out"
                         >
@@ -1157,6 +1319,13 @@ const AdminPage = () => {
                                   <span className="text-slate-800 dark:text-slate-400 text-xs">
                                     {week.weekGoal}
                                   </span>
+                                </button>
+                                <button
+                                  onClick={() => handleOpenEditWeek(week)}
+                                  className="text-sky-400/70 hover:text-sky-400 transition-all duration-300 ease-out"
+                                  title="تعديل"
+                                >
+                                  <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
                                 </button>
                                 <button
                                   onClick={() => handleDeleteWeek(week.id)}
@@ -1266,19 +1435,6 @@ const AdminPage = () => {
                                         <input
                                           type="number"
                                           min="1"
-                                          placeholder="ساعات"
-                                          value={lessonForm.estimatedHours}
-                                          onChange={(e) =>
-                                            setLessonForm({
-                                              ...lessonForm,
-                                              estimatedHours: e.target.value,
-                                            })
-                                          }
-                                          className="w-24 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none text-sm transition-all duration-300 ease-out"
-                                        />
-                                        <input
-                                          type="number"
-                                          min="1"
                                           placeholder="الترتيب"
                                           value={lessonForm.order}
                                           onChange={(e) =>
@@ -1287,7 +1443,7 @@ const AdminPage = () => {
                                               order: e.target.value,
                                             })
                                           }
-                                          className="w-24 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none text-sm transition-all duration-300 ease-out"
+                                          className="w-28 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none text-sm transition-all duration-300 ease-out"
                                         />
                                         <button
                                           type="submit"
@@ -1317,6 +1473,13 @@ const AdminPage = () => {
                                           {lesson.estimatedHours} ساعات
                                         </p>
                                       </div>
+                                      <button
+                                        onClick={() => handleOpenEditLesson(lesson)}
+                                        className="text-sky-400/60 hover:text-sky-400 shrink-0 transition-all duration-300 ease-out"
+                                        title="تعديل"
+                                      >
+                                        <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
+                                      </button>
                                       <button
                                         onClick={() =>
                                           handleDeleteLesson(lesson.id)
@@ -1351,6 +1514,166 @@ const AdminPage = () => {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* ── EDIT RESOURCE MODAL ── */}
+          {editingResource && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-md p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل الأداة</h3>
+                  <button onClick={() => setEditingResource(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                </div>
+                <form onSubmit={handleSaveEditResource} className="space-y-3">
+                  <input required type="text" placeholder="اسم الأداة" value={editResourceForm.name || ""}
+                    onChange={(e) => setEditResourceForm({ ...editResourceForm, name: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300" />
+                  <select required value={editResourceForm.categoryId || ""}
+                    onChange={(e) => setEditResourceForm({ ...editResourceForm, categoryId: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300">
+                    <option value="" disabled className="bg-gray-800">اختر الفئة</option>
+                    {categories.map((c) => (<option key={c.id} value={c.id} className="bg-gray-800">{c.name}</option>))}
+                  </select>
+                  <textarea placeholder="وصف الأداة" value={editResourceForm.description || ""} rows="3"
+                    onChange={(e) => setEditResourceForm({ ...editResourceForm, description: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none resize-none transition-all duration-300" />
+                  <input required type="url" placeholder="رابط الأداة" value={editResourceForm.link || ""} dir="ltr"
+                    onChange={(e) => setEditResourceForm({ ...editResourceForm, link: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none text-left transition-all duration-300" />
+                  {/* Logo URL (link only) */}
+                  <div className="space-y-1.5">
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">رابط صورة الأداة (اختياري)</span>
+                    <input type="url" placeholder="https://example.com/logo.png"
+                      value={editResourceForm.logoUrl || ""} dir="ltr"
+                      onChange={(e) => setEditResourceForm({ ...editResourceForm, logoUrl: e.target.value })}
+                      className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none text-left text-sm transition-all duration-300" />
+                    {editResourceForm.logoUrl && (
+                      <div className="flex items-center gap-3 pt-1">
+                        <img src={editResourceForm.logoUrl} alt="preview"
+                          className="w-10 h-10 object-contain rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1"
+                          onError={(e) => { e.target.style.display = 'none'; }} />
+                        <span className="text-xs text-slate-400">معاينة</span>
+                      </div>
+                    )}
+                  </div>
+                  <button type="submit"
+                    className="w-full py-2.5 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-lg shadow-md flex justify-center items-center gap-2 transition-all duration-300">
+                    حفظ التعديلات
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ── EDIT ROADMAP MODAL ── */}
+          {editingRoadmap && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-md p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل المسار</h3>
+                  <button onClick={() => setEditingRoadmap(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                </div>
+                <form onSubmit={handleSaveEditRoadmap} className="space-y-3">
+                  <input required type="text" placeholder="عنوان المسار" value={editRoadmapForm.title || ""}
+                    onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, title: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300" />
+                  <input type="text" placeholder="وصف المسار" value={editRoadmapForm.description || ""}
+                    onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, description: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300" />
+                  <select required value={editRoadmapForm.categoryId || ""}
+                    onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, categoryId: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300">
+                    <option value="" disabled className="bg-gray-800">اختر الفئة</option>
+                    {categories.map((c) => (<option key={c.id} value={c.id} className="bg-gray-800">{c.name}</option>))}
+                  </select>
+                  <select value={editRoadmapForm.level || "مبتدئ"}
+                    onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, level: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300">
+                    <option value="مبتدئ" className="bg-gray-800">مبتدئ</option>
+                    <option value="متوسط" className="bg-gray-800">متوسط</option>
+                    <option value="متقدم" className="bg-gray-800">متقدم</option>
+                  </select>
+                  <input type="number" min="1" placeholder="عدد الأسابيع" value={editRoadmapForm.totalWeeks || ""}
+                    onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, totalWeeks: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300" />
+                  <button type="submit"
+                    className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-white font-bold rounded-lg shadow-md flex justify-center items-center gap-2 transition-all duration-300">
+                    حفظ التعديلات
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ── EDIT WEEK MODAL ── */}
+          {editingWeek && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-sm p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل الأسبوع</h3>
+                  <button onClick={() => setEditingWeek(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                </div>
+                <form onSubmit={handleSaveEditWeek} className="space-y-3">
+                  <input required type="number" min="1" placeholder="رقم الأسبوع" value={editWeekForm.weekNumber || ""}
+                    onChange={(e) => setEditWeekForm({ ...editWeekForm, weekNumber: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300" />
+                  <input type="text" placeholder="هدف الأسبوع" value={editWeekForm.weekGoal || ""}
+                    onChange={(e) => setEditWeekForm({ ...editWeekForm, weekGoal: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300" />
+                  <button type="submit"
+                    className="w-full py-2.5 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-lg flex justify-center items-center gap-2 transition-all duration-300">
+                    حفظ التعديلات
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ── EDIT LESSON MODAL ── */}
+          {editingLesson && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-md p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل الدرس</h3>
+                  <button onClick={() => setEditingLesson(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                </div>
+                <form onSubmit={handleSaveEditLesson} className="space-y-3">
+                  <input required type="text" placeholder="عنوان الدرس" value={editLessonForm.title || ""}
+                    onChange={(e) => setEditLessonForm({ ...editLessonForm, title: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none transition-all duration-300" />
+                  <textarea placeholder="وصف الدرس" value={editLessonForm.description || ""} rows="2"
+                    onChange={(e) => setEditLessonForm({ ...editLessonForm, description: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none resize-none transition-all duration-300" />
+                  <select value={editLessonForm.source || "YouTube"}
+                    onChange={(e) => setEditLessonForm({ ...editLessonForm, source: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none transition-all duration-300">
+                    <option value="YouTube" className="bg-gray-800">YouTube</option>
+                    <option value="Udemy" className="bg-gray-800">Udemy</option>
+                    <option value="Coursera" className="bg-gray-800">Coursera</option>
+                    <option value="مقال" className="bg-gray-800">مقال</option>
+                    <option value="أخرى" className="bg-gray-800">أخرى</option>
+                  </select>
+                  <input type="url" placeholder="رابط المصدر" value={editLessonForm.resourceLink || ""} dir="ltr"
+                    onChange={(e) => setEditLessonForm({ ...editLessonForm, resourceLink: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none text-left transition-all duration-300" />
+                  <input type="number" min="1" placeholder="الترتيب" value={editLessonForm.order || ""}
+                    onChange={(e) => setEditLessonForm({ ...editLessonForm, order: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-emerald-400 outline-none transition-all duration-300" />
+                  <button type="submit"
+                    className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-lg flex justify-center items-center gap-2 transition-all duration-300">
+                    حفظ التعديلات
+                  </button>
+                </form>
+              </div>
             </div>
           )}
 

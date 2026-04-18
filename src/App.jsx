@@ -12,6 +12,8 @@ import ApplicationsPage from "./pages/ApplicationsPage";
 import AdminPage from "./pages/AdminPage";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import Onboarding from "./pages/Onboarding";
 import VerifyEmail from "./pages/VerifyEmail";
 import MainLayout from "./components/MainLayout";
@@ -34,6 +36,8 @@ function App() {
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
 
         {/* Onboarding — protected but no layout (full screen) */}
         <Route

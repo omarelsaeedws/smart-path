@@ -73,7 +73,7 @@ const ApplicationCard = ({ app, index, categoryName }) => {
           <img
             src={app.image}
             alt={app.title}
-            className="w-full h-full object-cover transition-all duration-300 ease-out group-hover:scale-105"
+            className="w-full h-full object-cover transition-all duration-300 ease-out "
             onError={(e) => {
               e.target.style.display = "none";
               e.target.nextSibling.style.display = "flex";

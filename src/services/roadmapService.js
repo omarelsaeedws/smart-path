@@ -5,6 +5,7 @@ import {
   getDocs,
   getDoc,
   addDoc,
+  updateDoc,
   deleteDoc,
   query,
   orderBy,
@@ -33,6 +34,11 @@ export async function addRoadmap(data) {
   });
 }
 
+/** Update top-level roadmap fields (title, description, categoryId, level, etc.) */
+export async function updateRoadmap(roadmapId, data) {
+  return updateDoc(doc(db, "roadmaps", roadmapId), data);
+}
+
 export async function deleteRoadmap(roadmapId) {
   return deleteDoc(doc(db, "roadmaps", roadmapId));
 }
@@ -54,6 +60,14 @@ export async function addWeek(roadmapId, data) {
     ...data,
     createdAt: serverTimestamp(),
   });
+}
+
+/** Update a week (weekNumber, weekGoal, etc.) */
+export async function updateWeek(roadmapId, weekId, data) {
+  return updateDoc(
+    doc(db, "roadmaps", roadmapId, "weeks", weekId),
+    data
+  );
 }
 
 export async function deleteWeek(roadmapId, weekId) {
@@ -79,6 +93,14 @@ export async function addLesson(roadmapId, weekId, data) {
       ...data,
       createdAt: serverTimestamp(),
     }
+  );
+}
+
+/** Update a lesson (title, description, resourceLink, source, order, estimatedHours) */
+export async function updateLesson(roadmapId, weekId, lessonId, data) {
+  return updateDoc(
+    doc(db, "roadmaps", roadmapId, "weeks", weekId, "lessons", lessonId),
+    data
   );
 }
 

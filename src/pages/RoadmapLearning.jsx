@@ -19,7 +19,6 @@ import {
   faChevronDown,
   faChevronUp,
   faCalendarWeek,
-  faClock,
   faLink,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
@@ -297,12 +296,6 @@ const RoadmapLearning = () => {
                             {lesson.title}
                           </h4>
                           <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-xs mt-1">
-                            {lesson.estimatedHours && (
-                              <span className="flex items-center gap-1">
-                                <FontAwesomeIcon icon={faClock} />
-                                {lesson.estimatedHours} ساعات
-                              </span>
-                            )}
                             {!unlocked && (
                               <span className="text-amber-600 dark:text-amber-400/70 font-medium">
                                 🔒 أكمل الدرس السابق أولاً
