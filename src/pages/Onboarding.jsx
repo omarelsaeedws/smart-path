@@ -7,7 +7,6 @@ import { subscribeToCategories } from "../services/categoryService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
-  faClock,
   faChevronRight,
   faCheckCircle,
   faLayerGroup,
@@ -35,9 +34,8 @@ const Onboarding = () => {
   const navigate = useNavigate();
   const { currentUser, refreshUserProfile } = useAuth();
 
-  const [step, setStep] = useState(1); // 1=level, 2=hours, 3=interests
+  const [step, setStep] = useState(1); // 1=level, 2=interests
   const [level, setLevel] = useState("");
-  const [dailyStudyHours, setDailyStudyHours] = useState(2);
   const [interests, setInterests] = useState([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -72,7 +70,6 @@ const Onboarding = () => {
         userRef,
         {
           level,
-          dailyStudyHours,
           interests,
           isOnboarded: true,
           onboardingCompleted: true,
@@ -92,11 +89,10 @@ const Onboarding = () => {
 
   const canProceed = () => {
     if (step === 1) return level !== "";
-    if (step === 2) return dailyStudyHours >= 1;
     return interests.length > 0;
   };
 
-  const steps = ["مستواك", "وقتك", "اهتماماتك"];
+  const steps = ["مستواك", "اهتماماتك"];
 
   return (
     <div
@@ -195,44 +191,10 @@ const Onboarding = () => {
             </div>
           )}
 
-          {/* STEP 2: Daily Hours */}
-          {step === 2 && (
-            <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                <FontAwesomeIcon
-                  icon={faClock}
-                  className="text-sky-500 dark:text-sky-400"
-                />
-                كم ساعة يمكنك الدراسة يومياً؟
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mb-8">
-                هذا يساعدنا في تقدير المدة الزمنية لكل مسار
-              </p>
-              <div className="text-center">
-                <div className="text-7xl font-black text-slate-900 dark:text-white mb-2 tabular-nums">
-                  {dailyStudyHours}
-                </div>
-                <p className="text-sky-600 dark:text-sky-400 font-bold mb-8">
-                  ساعة / يوم
-                </p>
-                <input
-                  type="range"
-                  min="1"
-                  max="12"
-                  value={dailyStudyHours}
-                  onChange={(e) => setDailyStudyHours(Number(e.target.value))}
-                  className="w-full accent-sky-500 cursor-pointer"
-                />
-                <div className="flex justify-between text-slate-400 dark:text-slate-500 text-xs mt-2">
-                  <span>1 ساعة</span>
-                  <span>12 ساعة</span>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* STEP 3: Interests */}
-          {step === 3 && (
+
+          {/* STEP 2: Interests */}
+          {step === 2 && (
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                 <FontAwesomeIcon
@@ -326,7 +288,7 @@ const Onboarding = () => {
                 رجوع
               </button>
             )}
-            {step < 3 ? (
+            {step < 2 ? (
               <button
                 disabled={!canProceed()}
                 onClick={() => setStep((s) => s + 1)}

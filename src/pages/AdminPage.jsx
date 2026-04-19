@@ -388,7 +388,7 @@ const AdminPage = () => {
   };
 
   const handleDeleteWeek = async (weekId) => {
-    if (window.confirm("حذف هذا الأسبوع؟")) {
+    if (window.confirm("حذف هذه الوحدة")) {
       await deleteWeek(selectedRoadmapId, weekId);
       const updated = await getWeeks(selectedRoadmapId);
       setRoadmapWeeks(updated);
@@ -1105,7 +1105,7 @@ const AdminPage = () => {
                     type="number"
                     min="1"
                     max="52"
-                    placeholder="عدد الأسابيع"
+                    placeholder="عدد الوحدات"
                     value={roadmapForm.totalWeeks}
                     onChange={(e) =>
                       setRoadmapForm({
@@ -1214,7 +1214,7 @@ const AdminPage = () => {
                               {rm.title}
                             </p>
                             <p className="text-slate-800 dark:text-slate-400 text-xs">
-                              {rm.level} • {rm.totalWeeks} أسابيع
+                              {rm.level} • {rm.totalWeeks} وحدة 
                             </p>
                           </div>
                         </button>
@@ -1239,7 +1239,7 @@ const AdminPage = () => {
                           {/* Add week form */}
                           <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4">
                             <p className="text-sky-600 dark:text-sky-300 font-bold mb-3">
-                              ➕ إضافة أسبوع
+                              ➕ إضافة وحدة
                             </p>
                             <form
                               onSubmit={handleAddWeek}
@@ -1248,7 +1248,7 @@ const AdminPage = () => {
                               <input
                                 type="number"
                                 min="1"
-                                placeholder="رقم الأسبوع"
+                                placeholder="رقم الوحدة"
                                 value={weekForm.weekNumber}
                                 onChange={(e) =>
                                   setWeekForm({
@@ -1260,7 +1260,7 @@ const AdminPage = () => {
                               />
                               <input
                                 type="text"
-                                placeholder="هدف الأسبوع"
+                                placeholder="هدف الوحدة"
                                 value={weekForm.weekGoal}
                                 onChange={(e) =>
                                   setWeekForm({
@@ -1314,7 +1314,7 @@ const AdminPage = () => {
                                     className="text-sky-300 w-3"
                                   />
                                   <span className="text-slate-800 dark:text-white font-semibold text-sm">
-                                    الأسبوع {week.weekNumber}
+                                    الوحدة {week.weekNumber}
                                   </span>
                                   <span className="text-slate-800 dark:text-slate-400 text-xs">
                                     {week.weekGoal}
@@ -1505,7 +1505,7 @@ const AdminPage = () => {
 
                           {roadmapWeeks.length === 0 && (
                             <p className="text-slate-800 dark:text-slate-500 text-sm text-center py-3">
-                              لا توجد أسابيع. أضف أسبوعاً أولاً.
+                              لا توجد الوحدات. أضف وحدة أولاً.
                             </p>
                           )}
                         </div>
@@ -1598,7 +1598,7 @@ const AdminPage = () => {
                     <option value="متوسط" className="bg-gray-800">متوسط</option>
                     <option value="متقدم" className="bg-gray-800">متقدم</option>
                   </select>
-                  <input type="number" min="1" placeholder="عدد الأسابيع" value={editRoadmapForm.totalWeeks || ""}
+                  <input type="number" min="1" placeholder="عدد الوحدات" value={editRoadmapForm.totalWeeks || ""}
                     onChange={(e) => setEditRoadmapForm({ ...editRoadmapForm, totalWeeks: e.target.value })}
                     className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-amber-400 outline-none transition-all duration-300" />
                   <button type="submit"
@@ -1615,16 +1615,16 @@ const AdminPage = () => {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
               <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-sm p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل الأسبوع</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">تعديل الوحدة</h3>
                   <button onClick={() => setEditingWeek(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                     <FontAwesomeIcon icon={faXmark} />
                   </button>
                 </div>
                 <form onSubmit={handleSaveEditWeek} className="space-y-3">
-                  <input required type="number" min="1" placeholder="رقم الأسبوع" value={editWeekForm.weekNumber || ""}
+                  <input required type="number" min="1" placeholder="رقم الوحدة" value={editWeekForm.weekNumber || ""}
                     onChange={(e) => setEditWeekForm({ ...editWeekForm, weekNumber: e.target.value })}
                     className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300" />
-                  <input type="text" placeholder="هدف الأسبوع" value={editWeekForm.weekGoal || ""}
+                  <input type="text" placeholder="هدف الوحدة" value={editWeekForm.weekGoal || ""}
                     onChange={(e) => setEditWeekForm({ ...editWeekForm, weekGoal: e.target.value })}
                     className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white rounded-lg px-4 py-2 border border-slate-300 dark:border-slate-700 focus:border-sky-400 outline-none transition-all duration-300" />
                   <button type="submit"

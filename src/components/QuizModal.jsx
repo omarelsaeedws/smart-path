@@ -10,15 +10,8 @@ import {
   faRedoAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-/**
- * QuizModal
- * Props:
- *   lesson        – { id, title, description }
- *   onPass        – callback when score >= 60%
- *   onClose       – callback to close without passing
- */
 const QuizModal = ({ lesson, onPass, onClose }) => {
-  const [phase, setPhase] = useState("loading"); // loading | quiz | result
+  const [phase, setPhase] = useState("loading");
   const [questions, setQuestions] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [score, setScore] = useState(0);
@@ -83,7 +76,6 @@ const QuizModal = ({ lesson, onPass, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" dir="rtl">
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl text-slate-900 dark:text-white">
 
-        {/* Header */}
         <div className="sticky top-0 z-10 bg-sky-50/90 dark:bg-gradient-to-r dark:from-sky-600/80 dark:to-indigo-700/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 p-5 rounded-t-3xl flex items-center justify-between">
           <div>
             <h2 className="text-xl font-extrabold text-slate-800 dark:text-white">اختبار الدرس</h2>

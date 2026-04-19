@@ -118,7 +118,6 @@ function Login() {
   // ------------------------------------------------------------------------
   return (
     <AnimatedBackground>
-      {/* Logo */}
       <img src="/logo.png" alt="SmartPath Logo" width="200" className="mb-6 block dark:hidden" />
       <img src="/logo-white.png" alt="SmartPath Logo" width="200" className="mb-6 hidden dark:block" />
 

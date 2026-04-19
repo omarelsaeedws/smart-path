@@ -171,7 +171,7 @@ const RoadmapLearning = () => {
             </span>
             <span className="bg-indigo-100 dark:bg-indigo-500/30 text-indigo-700 dark:text-indigo-200 border border-indigo-200 dark:border-transparent px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
               <FontAwesomeIcon icon={faCalendarWeek} className="text-xs" />
-              {roadmap.totalWeeks || 0} أسابيع
+              {roadmap.totalWeeks || 0} وحدات
             </span>
           </div>
           <h1 className="text-3xl font-extrabold mb-2">{roadmap.title}</h1>
@@ -221,7 +221,7 @@ const RoadmapLearning = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                    الأسبوع {week.weekNumber}
+                    الوحدة {week.weekNumber}
                   </h2>
                   {week.weekGoal && (
                     <p className="text-sky-600 dark:text-sky-200 text-sm font-medium">
@@ -253,7 +253,6 @@ const RoadmapLearning = () => {
                             : "border-slate-200 dark:border-slate-700 opacity-60 cursor-not-allowed shadow-none"
                       }`}
                     >
-                      {/* Lesson header row */}
                       <div
                         onClick={() => {
                           if (!unlocked) return;
@@ -261,7 +260,6 @@ const RoadmapLearning = () => {
                         }}
                         className="p-5 flex items-center gap-4 w-full"
                       >
-                        {/* Status icon */}
                         <div
                           className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-sm flex-shrink-0 transition-colors ${
                             isCompleted
@@ -399,7 +397,7 @@ const RoadmapLearning = () => {
 
                 {week.lessons.length === 0 && (
                   <p className="text-slate-400 dark:text-slate-500 text-sm text-center py-4">
-                    لا توجد دروس في هذا الأسبوع بعد.
+                    لا توجد دروس في هذه الوحدة بعد.
                   </p>
                 )}
               </div>
@@ -409,7 +407,7 @@ const RoadmapLearning = () => {
           {weeks.length === 0 && (
             <div className="bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center text-slate-800 dark:text-white">
               <p className="text-slate-500 dark:text-slate-400">
-                لا توجد أسابيع في هذا المسار بعد.
+                لا توجد وحدات في هذا المسار بعد.
               </p>
             </div>
           )}

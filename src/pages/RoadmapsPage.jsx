@@ -271,7 +271,7 @@ const RoadmapsPage = () => {
                           icon={faCalendarWeek}
                           className="text-xs"
                         />
-                        {rm.totalWeeks || 0} أسابيع
+                        {rm.totalWeeks || 0} وحدات
                       </span>
                     </div>
 
@@ -391,7 +391,7 @@ const RoadmapsPage = () => {
                       icon={faCalendarWeek}
                       className="text-xs"
                     />
-                    {selectedRoadmap.totalWeeks || 0} أسابيع
+                    {selectedRoadmap.totalWeeks || 0} وحدات 
                   </span>
                 </div>
                 <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-tight">

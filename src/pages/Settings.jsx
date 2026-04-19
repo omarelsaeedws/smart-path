@@ -20,14 +20,14 @@ import {
   faUser,
   faEnvelope,
   faChartLine,
-  faClock,
   faSave,
   faKey,
   faTrashAlt,
   faExclamationTriangle,
-  faCheckCircle,
-  faTimesCircle,
+  faLayerGroup,
+  faCheckCircle as faCheckCircleSolid,
 } from "@fortawesome/free-solid-svg-icons";
+import { subscribeToCategories } from "../services/categoryService";
 
 // Toast Component
 const Toast = ({ message, type, onClose }) => {
@@ -46,10 +46,7 @@ const Toast = ({ message, type, onClose }) => {
           : "bg-red-500/20 border-red-500/30 text-red-100"
       }`}
     >
-      <FontAwesomeIcon
-        icon={type === "success" ? faCheckCircle : faTimesCircle}
-        className="text-xl"
-      />
+
       <span className="font-semibold">{message}</span>
     </div>
   );
@@ -89,7 +86,7 @@ const Settings = () => {
   const [profileData, setProfileData] = useState({
     name: "",
     level: "مبتدئ",
-    dailyHours: 2,
+    interests: [],
   });
 
   // UI State
@@ -100,6 +97,21 @@ const Settings = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [toast, setToast] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [catsLoading, setCatsLoading] = useState(true);
+  const [showInterestsDropdown, setShowInterestsDropdown] = useState(false);
+
+  // Cycling gradient palette for category tiles
+  const TILE_GRADIENTS = [
+    "from-sky-500 to-indigo-600",
+    "from-violet-500 to-purple-600",
+    "from-emerald-500 to-teal-600",
+    "from-rose-500 to-pink-600",
+    "from-amber-500 to-orange-600",
+    "from-cyan-500 to-blue-600",
+    "from-fuchsia-500 to-pink-600",
+    "from-lime-500 to-green-600",
+  ];
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -114,7 +126,7 @@ const Settings = () => {
       setProfileData({
         name: userProfile.displayName || currentUser?.displayName || "",
         level: userProfile.level || "مبتدئ",
-        dailyHours: userProfile.dailyHours || 2,
+        interests: userProfile.interests || [],
       });
       setLoadingInitial(false);
     } else if (currentUser) {
@@ -126,6 +138,23 @@ const Settings = () => {
     }
   }, [currentUser, userProfile]);
 
+  useEffect(() => {
+    const unsub = subscribeToCategories((data) => {
+      setCategories(data);
+      setCatsLoading(false);
+    });
+    return () => unsub();
+  }, []);
+
+  const toggleInterest = (id) => {
+    setProfileData((prev) => ({
+      ...prev,
+      interests: prev.interests.includes(id)
+        ? prev.interests.filter((i) => i !== id)
+        : [...prev.interests, id],
+    }));
+  };
+
   // ------------------------------------------------------------------------
   // Action Handlers
   // ------------------------------------------------------------------------
@@ -134,7 +163,7 @@ const Settings = () => {
     const { name, value } = e.target;
     setProfileData((prev) => ({
       ...prev,
-      [name]: name === "dailyHours" ? parseInt(value) || 1 : value,
+      [name]: value,
     }));
   };
 
@@ -158,7 +187,7 @@ const Settings = () => {
       await updateDoc(userRef, {
         displayName: profileData.name,
         level: profileData.level,
-        dailyHours: profileData.dailyHours,
+        interests: profileData.interests,
         updatedAt: new Date(),
       });
 
@@ -357,35 +386,20 @@ const Settings = () => {
                   />{" "}
                   المستوى الحالي
                 </label>
-                <div className="relative">
+                <div className="relative group">
                   <select
                     name="level"
                     value={profileData.level}
                     onChange={handleChange}
                     className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-sky-500 dark:focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 appearance-none cursor-pointer transition-all duration-300 ease-out"
                   >
-                    <option
-                      value="مبتدئ"
-                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    >
-                      مبتدئ
-                    </option>
-                    <option
-                      value="متوسط"
-                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    >
-                      متوسط
-                    </option>
-                    <option
-                      value="متقدم"
-                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    >
-                      متقدم
-                    </option>
+                    <option value="مبتدئ">مبتدئ</option>
+                    <option value="متوسط">متوسط</option>
+                    <option value="متقدم">متقدم</option>
                   </select>
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-500 dark:text-slate-400">
                     <svg
-                      className="w-4 h-4"
+                      className="w-4 h-4 transition-transform group-focus-within:rotate-180"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -400,26 +414,92 @@ const Settings = () => {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Daily Hours */}
-              <div className="flex flex-col gap-2">
-                <label className="text-slate-700 dark:text-slate-200 font-medium text-sm px-1 flex items-center gap-2">
+            {/* Interests (Integrated Select) */}
+            <div className="flex flex-col gap-2">
+              <label className="text-slate-700 dark:text-slate-200 font-medium text-sm px-1 flex items-center gap-2">
+                <FontAwesomeIcon
+                  icon={faLayerGroup}
+                  className="text-sky-600 dark:text-sky-400/70"
+                />{" "}
+                الاهتمامات المهنية
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowInterestsDropdown(!showInterestsDropdown)}
+                  className="w-full min-h-[3.5rem] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 flex items-center justify-between hover:border-sky-400 dark:hover:border-sky-500 transition-all duration-300 group"
+                >
+                  <div className="flex flex-wrap gap-2">
+                    {profileData.interests.length > 0 ? (
+                      categories
+                        .filter((c) => profileData.interests.includes(c.id))
+                        .map((c) => (
+                          <span
+                            key={c.id}
+                            className="bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-sm"
+                          >
+                            {c.name}
+                          </span>
+                        ))
+                    ) : (
+                      <span className="text-slate-400 dark:text-slate-500 text-sm">
+                        اختر اهتماماتك...
+                      </span>
+                    )}
+                  </div>
                   <FontAwesomeIcon
-                    icon={faClock}
-                    className="text-sky-600 dark:text-sky-400/70"
-                  />{" "}
-                  ساعات الدراسة (يومياً)
-                </label>
-                <input
-                  type="number"
-                  name="dailyHours"
-                  min="1"
-                  max="12"
-                  value={profileData.dailyHours}
-                  onChange={handleChange}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl py-3.5 px-4 focus:outline-none focus:border-sky-500 dark:focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all duration-300 ease-out"
-                />
+                    icon={faLayerGroup}
+                    className={`text-slate-400 transition-transform duration-300 ${showInterestsDropdown ? "rotate-180 text-sky-500" : ""}`}
+                  />
+                </button>
+
+                {showInterestsDropdown && (
+                  <div className="absolute z-50 mt-2 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex flex-wrap gap-2">
+                      {catsLoading ? (
+                        <div className="w-full text-center py-4 text-slate-400 text-sm animate-pulse">
+                          جاري تحميل الفئات...
+                        </div>
+                      ) : (
+                        categories.map((cat) => {
+                          const isSelected =
+                            profileData.interests.includes(cat.id);
+                          return (
+                            <button
+                              key={cat.id}
+                              type="button"
+                              onClick={() => toggleInterest(cat.id)}
+                              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                isSelected
+                                  ? "bg-sky-500 text-white shadow-md shadow-sky-500/20"
+                                  : "bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-transparent hover:border-sky-400"
+                              }`}
+                            >
+                              <span>{cat.name}</span>
+                              {isSelected && (
+                                <FontAwesomeIcon
+                                  icon={faCheckCircleSolid}
+                                  className="text-[10px]"
+                                />
+                              )}
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className="mt-2 flex items-center gap-2 px-1">
+                  <div className="w-1 h-1 rounded-full bg-sky-500"></div>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                    انقر لفتح القائمة وتعديل اهتماماتك.
+                  </p>
+                </div>
               </div>
+
+
             </div>
 
             <div className="mt-4 pt-6 border-t border-slate-200 dark:border-slate-700 flex justify-end">
@@ -440,6 +520,8 @@ const Settings = () => {
             </div>
           </form>
         </div>
+
+
 
         {/* Security / Password Card */}
         <div className="bg-white dark:bg-slate-800 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 sm:p-10 shadow-xl hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 ease-out">

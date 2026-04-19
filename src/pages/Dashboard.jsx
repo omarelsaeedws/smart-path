@@ -222,7 +222,7 @@ const Dashboard = () => {
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 flex-1 min-w-[110px]">
                   <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">
-                    عدد الأسابيع
+                    عدد الوحدات
                   </p>
                   <p className="text-2xl font-bold text-slate-800 dark:text-white">
                     {activeRoadmap.totalWeeks || 0}

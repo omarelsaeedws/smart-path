@@ -102,8 +102,6 @@ function VerifyEmail() {
 
   return (
     <AnimatedBackground>
-
-      {/* Toast */}
       {toast.isOpen && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 animate-fade-in w-[90%] max-w-md">
           <div
@@ -123,8 +121,6 @@ function VerifyEmail() {
           </div>
         </div>
       )}
-
-      {/* Logo */}
       <img
         src="/logo.png"
         alt="SmartPath Logo"
@@ -139,7 +135,6 @@ function VerifyEmail() {
       />
 
       <section className="w-full max-w-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8 md:p-10 mb-8 text-center flex flex-col items-center">
-        {/* Icon */}
         <div className="w-20 h-20 bg-sky-50 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/30 rounded-full flex items-center justify-center mb-6">
           <FontAwesomeIcon
             icon={faEnvelopeOpenText}
