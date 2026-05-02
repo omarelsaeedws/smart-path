@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
                 isOnboarded: false,
                 firstLogin: true,
                 email: user.email,
-                role: user.email === "admin@smartpath.com" ? "admin" : "user",
+                role: user.email === "smartpatheg@gmail.com" ? "admin" : "user",
                 status: "active",
                 createdAt: serverTimestamp(),
               };

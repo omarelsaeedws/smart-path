@@ -118,7 +118,6 @@ Generate 5 MCQ questions for this lesson.`;
     });
 
     const rawContent = completion.choices[0].message.content;
-    console.log("RAW AI RESPONSE:", rawContent);
     const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("No JSON object found in AI response");
 
@@ -135,7 +134,6 @@ Generate 5 MCQ questions for this lesson.`;
     }));
 
     quizData = safeQuestions.length ? safeQuestions : [];
-    console.log("PARSED QUESTIONS:", quizData);
     logger.info(`Quiz generated for lesson: ${lessonId}`);
   } catch (aiError) {
     logger.error("AI quiz generation failed, using fallback:", aiError.message);
@@ -146,7 +144,7 @@ Generate 5 MCQ questions for this lesson.`;
         correctAnswer: "لغة ترميز"
       }
     ];
-    console.log("PARSED QUESTIONS:", quizData);
+    
   }
 
   // ── Step 3: Cache in Firestore ─────────────────────────────

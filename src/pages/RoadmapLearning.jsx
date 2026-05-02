@@ -12,6 +12,7 @@ import {
   isLessonUnlocked,
 } from "../services/progressService";
 import QuizModal from "../components/QuizModal";
+import LessonVideo from "../components/LessonVideo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
@@ -19,17 +20,10 @@ import {
   faChevronDown,
   faChevronUp,
   faCalendarWeek,
-  faLink,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Helper to extract YouTube ID
-const getYouTubeId = (url) => {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
+
 
 const RoadmapLearning = () => {
   const { roadmapId } = useParams();
@@ -335,37 +329,10 @@ const RoadmapLearning = () => {
                           {lesson.resourceLink &&
                             lesson.resourceLink !== "pending" && (
                               <div className="mb-6">
-                                {(() => {
-                                  const videoId = getYouTubeId(
-                                    lesson.resourceLink,
-                                  );
-                                  if (videoId) {
-                                    return (
-                                      <div
-                                        className="relative w-full overflow-hidden rounded-xl shadow-lg border border-slate-200 dark:border-slate-700"
-                                        style={{ paddingTop: "56.25%" }}
-                                      >
-                                        <iframe
-                                          className="absolute top-0 left-0 w-full h-full"
-                                          src={`https://www.youtube.com/embed/${videoId}`}
-                                          title="Lesson Video"
-                                          allowFullScreen
-                                        ></iframe>
-                                      </div>
-                                    );
-                                  }
-                                  return (
-                                    <a
-                                      href={lesson.resourceLink}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-2 bg-sky-50 dark:bg-sky-500/20 hover:bg-sky-100 dark:hover:bg-sky-500/30 border border-sky-200 dark:border-sky-400/30 text-sky-600 dark:text-sky-300 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ease-out"
-                                    >
-                                      <FontAwesomeIcon icon={faLink} />
-                                      رابط المصدر التعليمي
-                                    </a>
-                                  );
-                                })()}
+                                <LessonVideo
+                                  url={lesson.resourceLink}
+                                  title={lesson.title}
+                                />
                               </div>
                             )}
 

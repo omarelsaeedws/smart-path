@@ -1,0 +1,109 @@
+{
+  "title": "مسار تطوير الواجهات الأمامية",
+  "description": "مسار شامل لتعلم تطوير الواجهات من الصفر حتى الاحتراف، يغطي HTML وCSS وJavaScript وReact",
+  "categoryId": "REPLACE_WITH_REAL_CATEGORY_ID",
+  "level": "مبتدئ",
+  "instructor": "Elzero Web School",
+  "source": "YouTube",
+  "sourceUrl": "https://www.youtube.com/c/ElzeroWebSchool",
+  "weeks": [
+    {
+      "title": "الوحدة 1 - أساسيات HTML",
+      "order": 1,
+      "lessons": [
+        {
+          "title": "مقدمة عن HTML وبنية الصفحة",
+          "description": "تعرف على لغة HTML وكيفية بناء هيكل صفحة الويب الأولى",
+          "videoUrl": "https://www.youtube.com/embed/qfPtuhxLp6o",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 1
+        },
+        {
+          "title": "العناصر الأساسية والتاجات",
+          "description": "شرح أهم التاجات مثل h1، p، a، img، div، span",
+          "videoUrl": "https://www.youtube.com/embed/UB1O30fR-EE",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 2
+        },
+        {
+          "title": "النماذج والجداول في HTML",
+          "description": "تعلم كيفية إنشاء نماذج المدخلات والجداول",
+          "videoUrl": "https://www.youtube.com/embed/ysEN5RaKOlA",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "title": "الوحدة 2 - تصميم الصفحات بـ CSS",
+      "order": 2,
+      "lessons": [
+        {
+          "title": "مقدمة في CSS وكيفية ربطه بالصفحة",
+          "description": "تعلم كيفية كتابة أول ملف CSS وربطه مع HTML",
+          "videoUrl": "https://www.youtube.com/embed/Z4pCqK-V_Wo",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 1
+        },
+        {
+          "title": "المحددات (Selectors) والخصائص",
+          "description": "شرح أنواع المحددات مثل class، id، element",
+          "videoUrl": "https://www.youtube.com/embed/KFKScNHa-8M",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 2
+        },
+        {
+          "title": "نظام Flexbox للتخطيط",
+          "description": "تعلم تخطيط الصفحة باستخدام Flexbox بشكل احترافي",
+          "videoUrl": "https://www.youtube.com/embed/JJSoEo8JSnc",
+          "source": "YouTube",
+          "estimatedHours": 2,
+          "order": 3
+        },
+        {
+          "title": "التصميم المتجاوب (Responsive Design)",
+          "description": "استخدام Media Queries لجعل الصفحة تعمل على جميع الشاشات",
+          "videoUrl": "https://www.youtube.com/embed/srvUrASNj0s",
+          "source": "YouTube",
+          "estimatedHours": 2,
+          "order": 4
+        }
+      ]
+    },
+    {
+      "title": "الوحدة 3 - أساسيات JavaScript",
+      "order": 3,
+      "lessons": [
+        {
+          "title": "مقدمة في JavaScript والمتغيرات",
+          "description": "تعرف على لغة JavaScript وكيفية تعريف المتغيرات باستخدام var، let، const",
+          "videoUrl": "https://www.youtube.com/embed/W6NZfCO5SIk",
+          "source": "YouTube",
+          "estimatedHours": 1,
+          "order": 1
+        },
+        {
+          "title": "الدوال والشروط والحلقات",
+          "description": "شرح Functions، if/else، for loop، while",
+          "videoUrl": "https://www.youtube.com/embed/Mus_vwhTCq0",
+          "source": "YouTube",
+          "estimatedHours": 2,
+          "order": 2
+        },
+        {
+          "title": "التعامل مع DOM",
+          "description": "تعلم كيفية التفاعل مع عناصر الصفحة وتغييرها ديناميكياً",
+          "videoUrl": "https://www.youtube.com/embed/0ik6X4DJKCc",
+          "source": "YouTube",
+          "estimatedHours": 2,
+          "order": 3
+        }
+      ]
+    }
+  ]
+}

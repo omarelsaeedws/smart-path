@@ -37,7 +37,7 @@ if (
   connectStorageEmulator(storage, "127.0.0.1", 9199);
   connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 
-  console.log("🚀 Connected to Firebase Emulators");
+  
 }
 
 export { db, auth, storage, functions };

@@ -329,66 +329,9 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* ── Suggested Applications (interest-filtered) ── */}
-        {suggestedApps.length > 0 && (
-          <div className="animate-fade-in-up stagger-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
-                <FontAwesomeIcon
-                  icon={faLaptopCode}
-                  className="text-violet-500 dark:text-violet-400"
-                />
-                {hasInterests ? "تطبيقات تناسب اهتماماتك" : "تطبيقات مقترحة"}
-              </h2>
-              <button
-                onClick={() => navigate("/applications")}
-                className="text-sky-500 dark:text-sky-300 hover:text-sky-600 dark:hover:text-sky-200 font-bold text-sm flex items-center gap-1 transition-all duration-300 ease-out"
-              >
-                عرض الكل
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {suggestedApps.map((app) => (
-                <div
-                  key={app.id}
-                  className="bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:bg-white dark:hover:bg-slate-700 group flex flex-col hover-lift transition-all duration-300 ease-out"
-                >
-                  {categoryMap[app.categoryId] && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-violet-100 dark:bg-violet-500/15 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20 mb-2 w-fit">
-                      <FontAwesomeIcon icon={faTag} className="text-[9px]" />
-                      {categoryMap[app.categoryId]}
-                    </span>
-                  )}
-                  <h3 className="text-slate-800 dark:text-white font-bold mb-1 line-clamp-2 group-hover:text-violet-600 dark:group-hover:text-violet-300 flex-1 transition-all duration-300 ease-out">
-                    {app.title}
-                  </h3>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3">
-                    {app.description}
-                  </p>
-                  {app.link ? (
-                    <a
-                      href={app.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto text-center py-2 bg-violet-50 dark:bg-violet-500/10 hover:bg-violet-100 dark:hover:bg-violet-500/20 text-violet-600 dark:text-violet-300 text-xs font-bold rounded-lg border border-violet-100 dark:border-violet-500/20 flex items-center justify-center gap-1 transition-all duration-300 ease-out"
-                    >
-                      <FontAwesomeIcon
-                        icon={faExternalLinkAlt}
-                        className="text-[10px]"
-                      />
-                      عرض المشروع
-                    </a>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* ── Suggested Tools (interest-filtered) ── */}
         {suggestedTools.length > 0 && (
-          <div>
+          <div className="animate-fade-in-up stagger-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
                 <FontAwesomeIcon
@@ -453,6 +396,63 @@ const Dashboard = () => {
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
                     فتح الأداة
                   </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Suggested Applications (interest-filtered) ── */}
+        {suggestedApps.length > 0 && (
+          <div className="animate-fade-in-up stagger-5">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
+                <FontAwesomeIcon
+                  icon={faLaptopCode}
+                  className="text-violet-500 dark:text-violet-400"
+                />
+                {hasInterests ? "تطبيقات تناسب اهتماماتك" : "تطبيقات مقترحة"}
+              </h2>
+              <button
+                onClick={() => navigate("/applications")}
+                className="text-sky-500 dark:text-sky-300 hover:text-sky-600 dark:hover:text-sky-200 font-bold text-sm flex items-center gap-1 transition-all duration-300 ease-out"
+              >
+                عرض الكل
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {suggestedApps.map((app) => (
+                <div
+                  key={app.id}
+                  className="bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:bg-white dark:hover:bg-slate-700 group flex flex-col hover-lift transition-all duration-300 ease-out"
+                >
+                  {categoryMap[app.categoryId] && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-violet-100 dark:bg-violet-500/15 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20 mb-2 w-fit">
+                      <FontAwesomeIcon icon={faTag} className="text-[9px]" />
+                      {categoryMap[app.categoryId]}
+                    </span>
+                  )}
+                  <h3 className="text-slate-800 dark:text-white font-bold mb-1 line-clamp-2 group-hover:text-violet-600 dark:group-hover:text-violet-300 flex-1 transition-all duration-300 ease-out">
+                    {app.title}
+                  </h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3">
+                    {app.description}
+                  </p>
+                  {app.link ? (
+                    <a
+                      href={app.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto text-center py-2 bg-violet-50 dark:bg-violet-500/10 hover:bg-violet-100 dark:hover:bg-violet-500/20 text-violet-600 dark:text-violet-300 text-xs font-bold rounded-lg border border-violet-100 dark:border-violet-500/20 flex items-center justify-center gap-1 transition-all duration-300 ease-out"
+                    >
+                      <FontAwesomeIcon
+                        icon={faExternalLinkAlt}
+                        className="text-[10px]"
+                      />
+                      عرض المشروع
+                    </a>
+                  ) : null}
                 </div>
               ))}
             </div>
