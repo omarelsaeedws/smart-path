@@ -10,9 +10,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
   faCalendarWeek,
+  faMagnifyingGlass,
   faPlay,
   faStar as faStarSolid,
   faTag,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 // ── Skeleton Card ────────────────────────────────────────────────────────────
@@ -44,6 +46,7 @@ const RoadmapsPage = () => {
 
   // Filters
   const [activeCategoryId, setActiveCategoryId] = useState("الكل");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Ratings
   const [userRating, setUserRating] = useState(0);
@@ -152,10 +155,17 @@ const RoadmapsPage = () => {
 
   // Filter roadmaps
   const filtered = useMemo(() => {
-    return roadmaps.filter(
-      (rm) => activeCategoryId === "الكل" || rm.categoryId === activeCategoryId,
-    );
-  }, [roadmaps, activeCategoryId]);
+    const q = searchQuery.trim().toLowerCase();
+    return roadmaps.filter((rm) => {
+      const matchesCategory =
+        activeCategoryId === "الكل" || rm.categoryId === activeCategoryId;
+      const matchesSearch =
+        !q ||
+        rm.title?.toLowerCase().includes(q) ||
+        rm.description?.toLowerCase().includes(q);
+      return matchesCategory && matchesSearch;
+    });
+  }, [roadmaps, activeCategoryId, searchQuery]);
 
   return (
     <div
@@ -175,6 +185,31 @@ const RoadmapsPage = () => {
           <p className="text-slate-500 dark:text-slate-400">
             اختر مساراً وابدأ رحلتك التعليمية الآن
           </p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative mb-5 animate-fade-in-up stagger-2">
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="absolute top-1/2 -translate-y-1/2 right-4 text-slate-400 dark:text-slate-500 pointer-events-none"
+          />
+          <input
+            id="roadmaps-search"
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="ابحث عن مسار..."
+            className="w-full bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl pr-11 pl-10 py-3 text-sm text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 dark:focus:border-sky-500 transition-all duration-300 shadow-sm"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute top-1/2 -translate-y-1/2 left-4 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-white transition-colors duration-200"
+              aria-label="مسح البحث"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          )}
         </div>
 
         {/* Category Filters */}
@@ -227,9 +262,11 @@ const RoadmapsPage = () => {
               لا توجد مسارات حالياً
             </h2>
             <p className="text-slate-500 dark:text-slate-400">
-              {activeCategoryId === "الكل"
-                ? "سيضيف المدراء مسارات تعليمية قريباً. تفقد هذه الصفحة لاحقاً."
-                : "لا توجد مسارات لهذه الفئة حالياً."}
+              {searchQuery.trim()
+                ? `لا توجد نتائج لـ "${searchQuery.trim()}"`
+                : activeCategoryId === "الكل"
+                  ? "سيضيف المدراء مسارات تعليمية قريباً. تفقد هذه الصفحة لاحقاً."
+                  : "لا توجد مسارات لهذه الفئة حالياً."}
             </p>
           </div>
         )}
